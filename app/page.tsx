@@ -13,26 +13,26 @@ import { CalendarCheck, Calendar, MapPin, TrendingUp } from "lucide-react";
 const stats = [
   {
     title: "Available Slots",
-    value: "12",
-    description: "3 courts available",
+    value: "0",
+    description: "No data yet",
     icon: CalendarCheck,
   },
   {
     title: "Upcoming Schedules",
-    value: "8",
-    description: "This week",
+    value: "0",
+    description: "No data yet",
     icon: Calendar,
   },
   {
     title: "Active Venues",
-    value: "3",
-    description: "All operational",
+    value: "0",
+    description: "No data yet",
     icon: MapPin,
   },
   {
     title: "Total Bookings",
-    value: "156",
-    description: "+12% from last month",
+    value: "0",
+    description: "No data yet",
     icon: TrendingUp,
   },
 ];
@@ -92,43 +92,7 @@ export default function Home() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {[
-                {
-                  title: "Court A booked",
-                  time: "2 hours ago",
-                  user: "John D.",
-                },
-                {
-                  title: "New schedule created",
-                  time: "5 hours ago",
-                  user: "Admin",
-                },
-                {
-                  title: "Court B maintenance",
-                  time: "1 day ago",
-                  user: "System",
-                },
-                {
-                  title: "Venue updated",
-                  time: "2 days ago",
-                  user: "Admin",
-                },
-              ].map((item, i) => (
-                <div
-                  key={i}
-                  className="flex items-center justify-between border-b pb-3 last:border-0 last:pb-0"
-                >
-                  <div className="min-w-0 flex-1">
-                    <p className="text-sm font-medium truncate">{item.title}</p>
-                    <p className="text-xs text-muted-foreground">
-                      by {item.user}
-                    </p>
-                  </div>
-                  <span className="ml-4 shrink-0 text-xs text-muted-foreground">
-                    {item.time}
-                  </span>
-                </div>
-              ))}
+              <p className="text-sm text-muted-foreground text-center py-4">No recent activity</p>
             </div>
           </CardContent>
         </Card>

@@ -62,62 +62,7 @@ const categories = [
   "Equipment",
 ];
 
-const initialProducts: Product[] = [
-  {
-    id: 1,
-    name: "Pro Basketball",
-    description: "Official size and weight basketball for competitive play.",
-    price: 29.99,
-    category: "Basketball",
-    stock: 45,
-    status: "In Stock",
-  },
-  {
-    id: 2,
-    name: "Team Jersey",
-    description: "Moisture-wicking jersey with custom team logo.",
-    price: 49.99,
-    category: "Apparel",
-    stock: 120,
-    status: "In Stock",
-  },
-  {
-    id: 3,
-    name: "Court Shoes",
-    description: "High-performance basketball shoes with ankle support.",
-    price: 89.99,
-    category: "Footwear",
-    stock: 3,
-    status: "Low Stock",
-  },
-  {
-    id: 4,
-    name: "Sports Bag",
-    description: "Durable bag for carrying basketball gear.",
-    price: 34.99,
-    category: "Accessories",
-    stock: 0,
-    status: "Out of Stock",
-  },
-  {
-    id: 5,
-    name: "Training Cones",
-    description: "Set of 12 agility cones for drills and training.",
-    price: 14.99,
-    category: "Equipment",
-    stock: 67,
-    status: "In Stock",
-  },
-  {
-    id: 6,
-    name: "Headband",
-    description: "Absorbent headband to keep sweat out of your eyes.",
-    price: 9.99,
-    category: "Accessories",
-    stock: 2,
-    status: "Low Stock",
-  },
-];
+const initialProducts: Product[] = [];
 
 function getStockStatus(stock: number): Product["status"] {
   if (stock === 0) return "Out of Stock";
@@ -465,7 +410,7 @@ export default function ProductsPage() {
                 id="add-category"
                 value={formData.category}
                 onChange={(e) => handleChange("category", e.target.value)}
-                className={`flex h-8 w-full rounded-md border bg-transparent px-2.5 py-1 text-base md:text-sm ${
+                className={`flex h-8 w-full rounded-md border bg-background px-2.5 py-1 text-base md:text-sm ${
                   errors.category ? "border-destructive" : "border-input"
                 } focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 outline-none`}
               >
@@ -565,7 +510,7 @@ export default function ProductsPage() {
                 id="edit-category"
                 value={formData.category}
                 onChange={(e) => handleChange("category", e.target.value)}
-                className={`flex h-8 w-full rounded-md border bg-transparent px-2.5 py-1 text-base md:text-sm ${
+                className={`flex h-8 w-full rounded-md border bg-background px-2.5 py-1 text-base md:text-sm ${
                   errors.category ? "border-destructive" : "border-input"
                 } focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 outline-none`}
               >
