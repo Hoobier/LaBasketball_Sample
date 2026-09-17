@@ -22,32 +22,14 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Building, Users, Plus, Trash2 } from "lucide-react";
 
-const initialVenues = [
-  {
-    id: 1,
-    name: "Main Arena",
-    courts: 2,
-    capacity: 500,
-    status: "Active",
-    address: "123 Basketball St, Sports City",
-  },
-  {
-    id: 2,
-    name: "Training Hall",
-    courts: 1,
-    capacity: 100,
-    status: "Active",
-    address: "456 Practice Ave, Sports City",
-  },
-  {
-    id: 3,
-    name: "Outdoor Court",
-    courts: 1,
-    capacity: 0,
-    status: "Active",
-    address: "789 Park Rd, Sports City",
-  },
-];
+const initialVenues: Array<{
+  id: number;
+  name: string;
+  courts: number;
+  capacity: number;
+  status: string;
+  address: string;
+}> = [];
 
 export default function VenuePage() {
   const [venues, setVenues] = useState(initialVenues);
@@ -88,78 +70,90 @@ export default function VenuePage() {
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {venues.map((venue) => (
-          <Card key={venue.id}>
-            <CardHeader>
-              <div className="flex items-start justify-between gap-2">
-                <CardTitle className="text-base sm:text-lg">
-                  {venue.name}
-                </CardTitle>
-                <div className="flex items-center gap-2">
-                  <Badge variant="default">{venue.status}</Badge>
-                  <Button
-                    variant="ghost"
-                    size="icon-sm"
-                    onClick={() => setDeleteId(venue.id)}
-                  >
-                    <Trash2 className="h-3.5 w-3.5 text-destructive" />
-                  </Button>
-                </div>
-              </div>
-              <CardDescription className="break-words">
-                {venue.address}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between text-sm">
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Building className="h-4 w-4 shrink-0" />
-                    Courts
-                  </div>
-                  <span className="font-medium">{venue.courts}</span>
-                </div>
-                <div className="flex items-center justify-between text-sm">
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Users className="h-4 w-4 shrink-0" />
-                    Capacity
-                  </div>
-                  <span className="font-medium">
-                    {venue.capacity > 0
-                      ? `${venue.capacity} people`
-                      : "Open air"}
-                  </span>
-                </div>
-                <div className="flex gap-2 pt-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="flex-1"
-                    onClick={() =>
-                      toast.info("Edit venue", {
-                        description: `Editing ${venue.name}`,
-                      })
-                    }
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="flex-1"
-                    onClick={() =>
-                      toast.info("Venue details", {
-                        description: `Viewing details for ${venue.name}`,
-                      })
-                    }
-                  >
-                    Details
-                  </Button>
-                </div>
-              </div>
+        {venues.length === 0 ? (
+          <Card className="col-span-full">
+            <CardContent className="flex flex-col items-center justify-center py-12">
+              <Building className="h-12 w-12 text-muted-foreground mb-4" />
+              <p className="text-lg font-medium">No venues yet</p>
+              <p className="text-sm text-muted-foreground">Add your first venue to get started</p>
             </CardContent>
           </Card>
-        ))}
+        ) : (
+          <>
+            {venues.map((venue) => (
+              <Card key={venue.id}>
+                <CardHeader>
+                  <div className="flex items-start justify-between gap-2">
+                    <CardTitle className="text-base sm:text-lg">
+                      {venue.name}
+                    </CardTitle>
+                    <div className="flex items-center gap-2">
+                      <Badge variant="default">{venue.status}</Badge>
+                      <Button
+                        variant="ghost"
+                        size="icon-sm"
+                        onClick={() => setDeleteId(venue.id)}
+                      >
+                        <Trash2 className="h-3.5 w-3.5 text-destructive" />
+                      </Button>
+                    </div>
+                  </div>
+                  <CardDescription className="break-words">
+                    {venue.address}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between text-sm">
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <Building className="h-4 w-4 shrink-0" />
+                        Courts
+                      </div>
+                      <span className="font-medium">{venue.courts}</span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <Users className="h-4 w-4 shrink-0" />
+                        Capacity
+                      </div>
+                      <span className="font-medium">
+                        {venue.capacity > 0
+                          ? `${venue.capacity} people`
+                          : "Open air"}
+                      </span>
+                    </div>
+                    <div className="flex gap-2 pt-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="flex-1"
+                        onClick={() =>
+                          toast.info("Edit venue", {
+                            description: `Editing ${venue.name}`,
+                          })
+                        }
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="flex-1"
+                        onClick={() =>
+                          toast.info("Venue details", {
+                            description: `Viewing details for ${venue.name}`,
+                          })
+                        }
+                      >
+                        Details
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </>
+        )}
       </div>
 
       <Dialog open={deleteId !== null} onOpenChange={() => setDeleteId(null)}>

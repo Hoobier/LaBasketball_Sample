@@ -30,21 +30,12 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Plus, Pencil, Trash2 } from "lucide-react";
 
-const initialSlots = [
-  { id: 1, time: "9:00 AM - 10:00 AM", court: "Court A", status: "Available" },
-  { id: 2, time: "10:00 AM - 11:00 AM", court: "Court A", status: "Booked" },
-  { id: 3, time: "11:00 AM - 12:00 PM", court: "Court B", status: "Available" },
-  { id: 4, time: "1:00 PM - 2:00 PM", court: "Court A", status: "Available" },
-  {
-    id: 5,
-    time: "2:00 PM - 3:00 PM",
-    court: "Court B",
-    status: "Maintenance",
-  },
-  { id: 6, time: "3:00 PM - 4:00 PM", court: "Court A", status: "Booked" },
-  { id: 7, time: "4:00 PM - 5:00 PM", court: "Court B", status: "Available" },
-  { id: 8, time: "5:00 PM - 6:00 PM", court: "Court A", status: "Available" },
-];
+const initialSlots: Array<{
+  id: number;
+  time: string;
+  court: string;
+  status: string;
+}> = [];
 
 function statusVariant(status: string) {
   switch (status) {
@@ -149,39 +140,49 @@ export default function AvailableSlotPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {slots.map((slot) => (
-                <TableRow key={slot.id}>
-                  <TableCell className="font-medium">{slot.time}</TableCell>
-                  <TableCell>{slot.court}</TableCell>
-                  <TableCell>
-                    <Badge variant={statusVariant(slot.status)}>
-                      {slot.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex justify-end gap-1">
-                      <Button
-                        variant="ghost"
-                        size="icon-sm"
-                        onClick={() =>
-                          toast.info("Edit slot", {
-                            description: `Editing ${slot.time} at ${slot.court}`,
-                          })
-                        }
-                      >
-                        <Pencil className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon-sm"
-                        onClick={() => setDeleteId(slot.id)}
-                      >
-                        <Trash2 className="h-4 w-4 text-destructive" />
-                      </Button>
-                    </div>
+              {slots.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
+                    No slots available
                   </TableCell>
                 </TableRow>
-              ))}
+              ) : (
+                <>
+                  {slots.map((slot) => (
+                    <TableRow key={slot.id}>
+                      <TableCell className="font-medium">{slot.time}</TableCell>
+                      <TableCell>{slot.court}</TableCell>
+                      <TableCell>
+                        <Badge variant={statusVariant(slot.status)}>
+                          {slot.status}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex justify-end gap-1">
+                          <Button
+                            variant="ghost"
+                            size="icon-sm"
+                            onClick={() =>
+                              toast.info("Edit slot", {
+                                description: `Editing ${slot.time} at ${slot.court}`,
+                              })
+                            }
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon-sm"
+                            onClick={() => setDeleteId(slot.id)}
+                          >
+                            <Trash2 className="h-4 w-4 text-destructive" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </>
+              )}
             </TableBody>
           </Table>
         </CardContent>
@@ -197,40 +198,46 @@ export default function AvailableSlotPage() {
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {slots.map((slot) => (
-              <div
-                key={slot.id}
-                className="flex items-center justify-between rounded-lg border p-3"
-              >
-                <div className="min-w-0 flex-1">
-                  <p className="text-sm font-medium truncate">{slot.time}</p>
-                  <p className="text-xs text-muted-foreground">{slot.court}</p>
-                </div>
-                <div className="ml-3 flex items-center gap-2">
-                  <Badge variant={statusVariant(slot.status)}>
-                    {slot.status}
-                  </Badge>
-                  <Button
-                    variant="ghost"
-                    size="icon-sm"
-                    onClick={() =>
-                      toast.info("Edit slot", {
-                        description: `Editing ${slot.time} at ${slot.court}`,
-                      })
-                    }
+            {slots.length === 0 ? (
+              <p className="text-sm text-muted-foreground text-center py-4">No slots available</p>
+            ) : (
+              <>
+                {slots.map((slot) => (
+                  <div
+                    key={slot.id}
+                    className="flex items-center justify-between rounded-lg border p-3"
                   >
-                    <Pencil className="h-3.5 w-3.5" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon-sm"
-                    onClick={() => setDeleteId(slot.id)}
-                  >
-                    <Trash2 className="h-3.5 w-3.5 text-destructive" />
-                  </Button>
-                </div>
-              </div>
-            ))}
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-medium truncate">{slot.time}</p>
+                      <p className="text-xs text-muted-foreground">{slot.court}</p>
+                    </div>
+                    <div className="ml-3 flex items-center gap-2">
+                      <Badge variant={statusVariant(slot.status)}>
+                        {slot.status}
+                      </Badge>
+                      <Button
+                        variant="ghost"
+                        size="icon-sm"
+                        onClick={() =>
+                          toast.info("Edit slot", {
+                            description: `Editing ${slot.time} at ${slot.court}`,
+                          })
+                        }
+                      >
+                        <Pencil className="h-3.5 w-3.5" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon-sm"
+                        onClick={() => setDeleteId(slot.id)}
+                      >
+                        <Trash2 className="h-3.5 w-3.5 text-destructive" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </>
+            )}
           </div>
         </CardContent>
       </Card>

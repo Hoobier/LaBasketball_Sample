@@ -15,11 +15,14 @@ import {
   Trophy,
   X,
   ShoppingBag,
+  PanelLeftClose,
+  PanelLeftOpen,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "./ThemeToggle";
+import { useSettings } from "@/app/contexts/SettingsContext";
 import {
   Dialog,
   DialogClose,
@@ -39,7 +42,15 @@ const navItems = [
   { name: "Settings", href: "/settings", icon: Settings },
 ];
 
-function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
+function SidebarContent({
+  onNavigate,
+  collapsed,
+  onToggleCollapse,
+}: {
+  onNavigate?: () => void;
+  collapsed?: boolean;
+  onToggleCollapse?: () => void;
+}) {
   const pathname = usePathname();
   const router = useRouter();
   const [logoutOpen, setLogoutOpen] = useState(false);
@@ -54,15 +65,22 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex h-14 items-center gap-2 px-4">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
+      {/* Header */}
+      <div
+        className={cn(
+          "flex h-14 items-center gap-2 border-b px-4",
+          collapsed && "justify-center px-2"
+        )}
+      >
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary">
           <Trophy className="h-4 w-4 text-primary-foreground" />
         </div>
-        <span className="text-lg font-semibold">LaBasketball</span>
+        {!collapsed && (
+          <span className="text-lg font-semibold">L.A Basketball</span>
+        )}
       </div>
 
-      <Separator />
-
+      {/* Navigation */}
       <nav className="flex-1 space-y-1 px-3 py-4">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
@@ -72,32 +90,75 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
               key={item.name}
               href={item.href}
               onClick={onNavigate}
+              title={collapsed ? item.name : undefined}
               className={cn(
                 "flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors",
+                collapsed && "justify-center px-2",
                 isActive
                   ? "bg-primary text-primary-foreground"
                   : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
               )}
             >
-              <Icon className="h-4 w-4" />
-              {item.name}
+              <Icon className="h-4 w-4 shrink-0" />
+              {!collapsed && item.name}
             </Link>
           );
         })}
       </nav>
 
-      <Separator />
+      {/* Bottom Actions */}
+      <div className="mt-auto border-t">
+        {/* Collapse Toggle - Full width button */}
+        {onToggleCollapse && (
+          <button
+            onClick={onToggleCollapse}
+            title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            className={cn(
+              "flex w-full items-center gap-3 border-b px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground",
+              collapsed && "justify-center px-2"
+            )}
+          >
+            {collapsed ? (
+              <PanelLeftOpen className="h-4 w-4 shrink-0" />
+            ) : (
+              <>
+                <PanelLeftClose className="h-4 w-4 shrink-0" />
+                <span>Collapse</span>
+              </>
+            )}
+          </button>
+        )}
 
-      <div className="flex items-center gap-2 p-3">
-        <ThemeToggle />
-        <Button
-          variant="ghost"
-          className="flex-1 justify-start gap-3 text-muted-foreground"
-          onClick={() => setLogoutOpen(true)}
+        {/* Theme & Logout */}
+        <div
+          className={cn(
+            "flex items-center gap-2 p-3",
+            collapsed && "flex-col justify-center"
+          )}
         >
-          <LogOut className="h-4 w-4" />
-          Logout
-        </Button>
+          <ThemeToggle />
+          {!collapsed && (
+            <Button
+              variant="ghost"
+              className="flex-1 justify-start gap-3 text-muted-foreground"
+              onClick={() => setLogoutOpen(true)}
+            >
+              <LogOut className="h-4 w-4" />
+              Logout
+            </Button>
+          )}
+          {collapsed && (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-muted-foreground"
+              onClick={() => setLogoutOpen(true)}
+              title="Logout"
+            >
+              <LogOut className="h-4 w-4" />
+            </Button>
+          )}
+        </div>
       </div>
 
       <Dialog open={logoutOpen} onOpenChange={setLogoutOpen}>
@@ -125,7 +186,10 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
 
 export default function Sidebar() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const pathname = usePathname();
+  const { settings, updateSetting } = useSettings();
+  const collapsed = settings.sidebarCollapsed;
+  const position = settings.sidebarPosition;
+  const isRight = position === "right";
 
   return (
     <>
@@ -164,16 +228,35 @@ export default function Sidebar() {
       {/* Mobile Sidebar Drawer */}
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-50 w-64 bg-sidebar text-sidebar-foreground transition-transform duration-200 md:hidden",
-          mobileOpen ? "translate-x-0" : "-translate-x-full"
+          "fixed inset-y-0 z-50 w-64 bg-sidebar text-sidebar-foreground transition-transform duration-200 md:hidden",
+          isRight ? "right-0" : "left-0",
+          isRight
+            ? mobileOpen
+              ? "translate-x-0"
+              : "translate-x-full"
+            : mobileOpen
+              ? "translate-x-0"
+              : "-translate-x-full"
         )}
       >
         <SidebarContent onNavigate={() => setMobileOpen(false)} />
       </aside>
 
       {/* Desktop Sidebar */}
-      <aside className="hidden h-screen w-64 shrink-0 border-r bg-sidebar text-sidebar-foreground md:block md:sticky md:top-0">
-        <SidebarContent />
+      <aside
+        className={cn(
+          "hidden h-screen shrink-0 bg-sidebar text-sidebar-foreground transition-all duration-300 md:block md:sticky md:top-0",
+          isRight ? "border-l" : "border-r",
+          collapsed ? "w-16" : "w-64",
+          isRight && "order-last"
+        )}
+      >
+        <SidebarContent
+          collapsed={collapsed}
+          onToggleCollapse={() =>
+            updateSetting("sidebarCollapsed", !collapsed)
+          }
+        />
       </aside>
     </>
   );

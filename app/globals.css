@@ -128,3 +128,67 @@
     @apply font-sans scroll-smooth;
   }
 }
+
+/* Compact View - Reduces spacing throughout the app */
+.compact-view .p-4 {
+  padding: 0.5rem;
+}
+.compact-view .p-6 {
+  padding: 0.75rem;
+}
+.compact-view .p-8 {
+  padding: 1rem;
+}
+.compact-view .py-4 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+.compact-view .py-6 {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+.compact-view .px-4 {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+.compact-view .gap-4 {
+  gap: 0.5rem;
+}
+.compact-view .gap-6 {
+  gap: 0.75rem;
+}
+.compact-view .space-y-1 > * + * {
+  margin-top: 0.25rem;
+}
+.compact-view .space-y-2 > * + * {
+  margin-top: 0.375rem;
+}
+.compact-view .space-y-3 > * + * {
+  margin-top: 0.5rem;
+}
+.compact-view .space-y-4 > * + * {
+  margin-top: 0.625rem;
+}
+.compact-view .mb-6 {
+  margin-bottom: 0.75rem;
+}
+.compact-view .mb-8 {
+  margin-bottom: 1rem;
+}
+.compact-view .mt-6 {
+  margin-top: 0.75rem;
+}
+.compact-view .mt-8 {
+  margin-top: 1rem;
+}
+.compact-view .h-14 {
+  height: 2.75rem;
+}
+
+/* Reduced Animations - Disables transitions and animations */
+.reduce-animations * {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Sign Up - LaBasketball",
+  title: "Sign Up - L.A SBasketball",
 };
 
 export default function SignupLayout({

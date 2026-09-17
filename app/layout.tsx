@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "./components/ThemeProvider";
+import { SettingsProvider } from "./contexts/SettingsContext";
 import AppShell from "./components/AppShell";
 import "./globals.css";
 
@@ -15,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "LaBasketball",
-  description: "LaBasketball management system",
+  title: "L.A Basketball",
+  description: "L.A Basketball management system",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -31,7 +32,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           enableSystem
           disableTransitionOnChange
         >
-          <AppShell>{children}</AppShell>
+          <SettingsProvider>
+            <AppShell>{children}</AppShell>
+          </SettingsProvider>
         </ThemeProvider>
       </body>
     </html>
