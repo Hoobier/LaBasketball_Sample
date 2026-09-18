@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useAuth } from "@/app/contexts/AuthContext";
 import {
   LayoutDashboard,
   CalendarCheck,
@@ -53,10 +54,13 @@ function SidebarContent({
 }) {
   const pathname = usePathname();
   const router = useRouter();
+  const { logout } = useAuth();
   const [logoutOpen, setLogoutOpen] = useState(false);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     setLogoutOpen(false);
+    await fetch("/api/auth/logout", { method: "POST" });
+    logout();
     toast.success("Logged out successfully", {
       description: "You have been signed out of your account.",
     });

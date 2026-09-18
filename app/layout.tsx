@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "./components/ThemeProvider";
 import { SettingsProvider } from "./contexts/SettingsContext";
+import { AuthProvider } from "./contexts/AuthContext";
+import { CartProvider } from "./contexts/CartContext";
 import AppShell from "./components/AppShell";
 import "./globals.css";
 
@@ -32,9 +34,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           enableSystem
           disableTransitionOnChange
         >
-          <SettingsProvider>
-            <AppShell>{children}</AppShell>
-          </SettingsProvider>
+          <AuthProvider>
+            <CartProvider>
+              <SettingsProvider>
+                <AppShell>{children}</AppShell>
+              </SettingsProvider>
+            </CartProvider>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -14,7 +14,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { Key, Smartphone, Globe } from "lucide-react";
+import { Key, Smartphone, Globe, Loader2 } from "lucide-react";
+import { useAuth } from "@/app/contexts/AuthContext";
 
 const passwordSchema = z
   .object({
@@ -35,9 +36,9 @@ const passwordSchema = z
 type PasswordFormData = z.infer<typeof passwordSchema>;
 
 export default function SecurityTab() {
-  const [passwordErrors, setPasswordErrors] = useState<
-    Partial<Record<keyof PasswordFormData, string>>
-  >({});
+  const { token } = useAuth();
+  const [passwordErrors, setPasswordErrors] = useState<Partial<Record<keyof PasswordFormData, string>>>({});
+  const [saving, setSaving] = useState(false);
 
   const [passwords, setPasswords] = useState<PasswordFormData>({
     currentPassword: "",
@@ -45,17 +46,14 @@ export default function SecurityTab() {
     confirmPassword: "",
   });
 
-  const handlePasswordChange = (
-    field: keyof PasswordFormData,
-    value: string
-  ) => {
+  const handlePasswordChange = (field: keyof PasswordFormData, value: string) => {
     setPasswords((prev) => ({ ...prev, [field]: value }));
     if (passwordErrors[field]) {
       setPasswordErrors((prev) => ({ ...prev, [field]: undefined }));
     }
   };
 
-  const handlePasswordSave = (e: React.FormEvent) => {
+  const handlePasswordSave = async (e: React.FormEvent) => {
     e.preventDefault();
     const result = passwordSchema.safeParse(passwords);
     if (!result.success) {
@@ -67,15 +65,37 @@ export default function SecurityTab() {
       setPasswordErrors(fieldErrors);
       return;
     }
-    setPasswords({
-      currentPassword: "",
-      newPassword: "",
-      confirmPassword: "",
-    });
-    setPasswordErrors({});
-    toast.success("Password changed", {
-      description: "Your password has been updated successfully.",
-    });
+
+    setSaving(true);
+    try {
+      const response = await fetch("/api/user/password", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          currentPassword: result.data.currentPassword,
+          newPassword: result.data.newPassword,
+        }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        toast.error(data.error || "Failed to change password");
+        return;
+      }
+
+      setPasswords({ currentPassword: "", newPassword: "", confirmPassword: "" });
+      setPasswordErrors({});
+      toast.success("Password changed", {
+        description: "Your password has been updated successfully.",
+      });
+    } catch {
+      toast.error("Failed to change password");
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -99,17 +119,11 @@ export default function SecurityTab() {
                 id="currentPassword"
                 type="password"
                 value={passwords.currentPassword}
-                onChange={(e) =>
-                  handlePasswordChange("currentPassword", e.target.value)
-                }
-                className={
-                  passwordErrors.currentPassword ? "border-destructive" : ""
-                }
+                onChange={(e) => handlePasswordChange("currentPassword", e.target.value)}
+                className={passwordErrors.currentPassword ? "border-destructive" : ""}
               />
               {passwordErrors.currentPassword && (
-                <p className="text-sm text-destructive">
-                  {passwordErrors.currentPassword}
-                </p>
+                <p className="text-sm text-destructive">{passwordErrors.currentPassword}</p>
               )}
             </div>
             <div className="grid gap-2">
@@ -118,17 +132,11 @@ export default function SecurityTab() {
                 id="newPassword"
                 type="password"
                 value={passwords.newPassword}
-                onChange={(e) =>
-                  handlePasswordChange("newPassword", e.target.value)
-                }
-                className={
-                  passwordErrors.newPassword ? "border-destructive" : ""
-                }
+                onChange={(e) => handlePasswordChange("newPassword", e.target.value)}
+                className={passwordErrors.newPassword ? "border-destructive" : ""}
               />
               {passwordErrors.newPassword && (
-                <p className="text-sm text-destructive">
-                  {passwordErrors.newPassword}
-                </p>
+                <p className="text-sm text-destructive">{passwordErrors.newPassword}</p>
               )}
             </div>
             <div className="grid gap-2">
@@ -137,21 +145,19 @@ export default function SecurityTab() {
                 id="confirmPassword"
                 type="password"
                 value={passwords.confirmPassword}
-                onChange={(e) =>
-                  handlePasswordChange("confirmPassword", e.target.value)
-                }
-                className={
-                  passwordErrors.confirmPassword ? "border-destructive" : ""
-                }
+                onChange={(e) => handlePasswordChange("confirmPassword", e.target.value)}
+                className={passwordErrors.confirmPassword ? "border-destructive" : ""}
               />
               {passwordErrors.confirmPassword && (
-                <p className="text-sm text-destructive">
-                  {passwordErrors.confirmPassword}
-                </p>
+                <p className="text-sm text-destructive">{passwordErrors.confirmPassword}</p>
               )}
             </div>
-            <Button type="submit" className="w-full">
-              <Key className="mr-2 h-4 w-4" />
+            <Button type="submit" className="w-full" disabled={saving}>
+              {saving ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Key className="mr-2 h-4 w-4" />
+              )}
               Update Password
             </Button>
           </form>
@@ -173,9 +179,7 @@ export default function SecurityTab() {
           <CardContent>
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <p className="text-sm font-medium">
-                  Authenticator App
-                </p>
+                <p className="text-sm font-medium">Authenticator App</p>
                 <p className="text-sm text-muted-foreground">
                   Use an authenticator app to generate one-time codes
                 </p>
@@ -185,8 +189,7 @@ export default function SecurityTab() {
                 size="sm"
                 onClick={() =>
                   toast.info("Coming soon", {
-                    description:
-                      "Two-factor authentication will be available soon.",
+                    description: "Two-factor authentication will be available soon.",
                   })
                 }
               >
@@ -197,17 +200,14 @@ export default function SecurityTab() {
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <p className="text-sm font-medium">SMS Messages</p>
-                <p className="text-sm text-muted-foreground">
-                  Receive codes via text message
-                </p>
+                <p className="text-sm text-muted-foreground">Receive codes via text message</p>
               </div>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() =>
                   toast.info("Coming soon", {
-                    description:
-                      "SMS verification will be available soon.",
+                    description: "SMS verification will be available soon.",
                   })
                 }
               >
@@ -223,9 +223,7 @@ export default function SecurityTab() {
               <Globe className="h-5 w-5" />
               Active Sessions
             </CardTitle>
-            <CardDescription>
-              Manage your logged-in devices
-            </CardDescription>
+            <CardDescription>Manage your logged-in devices</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
             <p className="text-sm text-muted-foreground text-center py-4">No active sessions</p>

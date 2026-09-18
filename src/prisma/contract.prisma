@@ -1,21 +1,130 @@
-// // use prisma-8
+// use prisma-8
 
-// model User {
-//   id        Int      @id @default(autoincrement())
-//   email     String   @unique
-//   username  String?
-//   name      String?
-//   posts     Post[]
-//   createdAt TimestamptzString @default(now())
-//   updatedAt temporal.updatedAtString()
-// }
+enum Role {
+  user
+  admin
+}
 
-// model Post {
-//   id        Int      @id @default(autoincrement())
-//   title     String
-//   content   String?
-//   author    User     @relation(fields: [authorId], references: [id])
-//   authorId  Int
-//   createdAt TimestamptzString @default(now())
-//   updatedAt temporal.updatedAtString()
-// }
+enum SlotStatus {
+  Available
+  Booked
+  Maintenance
+}
+
+enum ReservationStatus {
+  Pending
+  Approved
+  Rejected
+}
+
+enum ScheduleType {
+  Game
+  Practice
+  Training
+}
+
+enum VenueStatus {
+  Active
+  Inactive
+}
+
+enum OrderStatus {
+  Pending
+  Processing
+  Completed
+  Cancelled
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  username  String?
+  name      String?
+  role      Role     @default(user)
+  createdAt TimestamptzString @default(now())
+  updatedAt TimestamptzString @default(now())
+}
+
+model Slot {
+  id        Int         @id @default(autoincrement())
+  time      String
+  court     String
+  status    SlotStatus  @default(Available)
+  createdAt TimestamptzString @default(now())
+  updatedAt TimestamptzString @default(now())
+}
+
+model Reservation {
+  id        Int               @id @default(autoincrement())
+  slotId    Int
+  userId    Int
+  status    ReservationStatus @default(Pending)
+  notes     String?
+  createdAt TimestamptzString @default(now())
+  updatedAt TimestamptzString @default(now())
+}
+
+model Schedule {
+  id        Int          @id @default(autoincrement())
+  title     String
+  date      String
+  time      String
+  court     String
+  team      String
+  type      ScheduleType @default(Game)
+  createdAt TimestamptzString @default(now())
+  updatedAt TimestamptzString @default(now())
+}
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  price       Float
+  category    String
+  stock       Int      @default(0)
+  createdAt   TimestamptzString @default(now())
+  updatedAt   TimestamptzString @default(now())
+}
+
+model Venue {
+  id        Int          @id @default(autoincrement())
+  name      String
+  address   String
+  courts    Int          @default(1)
+  capacity  Int          @default(0)
+  status    VenueStatus  @default(Active)
+  createdAt TimestamptzString @default(now())
+  updatedAt TimestamptzString @default(now())
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  title     String
+  message   String
+  type      String
+  read      Boolean  @default(false)
+  createdAt TimestamptzString @default(now())
+}
+
+model Order {
+  id          Int         @id @default(autoincrement())
+  userId      Int
+  totalAmount Float
+  status      OrderStatus @default(Pending)
+  address     String
+  phone       String
+  createdAt   TimestamptzString @default(now())
+  updatedAt   TimestamptzString @default(now())
+}
+
+model OrderItem {
+  id        Int      @id @default(autoincrement())
+  orderId   Int
+  productId Int
+  quantity  Int
+  price     Float
+  createdAt TimestamptzString @default(now())
+}
