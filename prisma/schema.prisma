@@ -1,0 +1,107 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model notification {
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  id        Int      @id @default(autoincrement())
+  message   String
+  read      Boolean  @default(false)
+  title     String
+  type      String
+  userId    Int
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model order {
+  address     String
+  createdAt   DateTime @default(now()) @db.Timestamptz(6)
+  id          Int      @id @default(autoincrement())
+  phone       String
+  status      String   @default("Pending")
+  totalAmount Float
+  updatedAt   DateTime @default(now()) @db.Timestamptz(6)
+  userId      Int
+}
+
+model orderItem {
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  id        Int      @id @default(autoincrement())
+  orderId   Int
+  price     Float
+  productId Int
+  quantity  Int
+}
+
+model product {
+  category    String
+  createdAt   DateTime @default(now()) @db.Timestamptz(6)
+  description String
+  id          Int      @id @default(autoincrement())
+  name        String
+  price       Float
+  stock       Int      @default(0)
+  updatedAt   DateTime @default(now()) @db.Timestamptz(6)
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model reservation {
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  id        Int      @id @default(autoincrement())
+  notes     String?
+  slotId    Int
+  status    String   @default("Pending")
+  updatedAt DateTime @default(now()) @db.Timestamptz(6)
+  userId    Int
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model schedule {
+  court     String
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  date      String
+  id        Int      @id @default(autoincrement())
+  team      String
+  time      String
+  title     String
+  type      String   @default("Game")
+  updatedAt DateTime @default(now()) @db.Timestamptz(6)
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model slot {
+  court     String
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  id        Int      @id @default(autoincrement())
+  status    String   @default("Available")
+  time      String
+  updatedAt DateTime @default(now()) @db.Timestamptz(6)
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model user {
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  email     String   @unique
+  id        Int      @id @default(autoincrement())
+  name      String?
+  password  String
+  role      String   @default("user")
+  updatedAt DateTime @default(now()) @db.Timestamptz(6)
+  username  String?
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model venue {
+  address   String
+  capacity  Int      @default(0)
+  courts    Int      @default(1)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  id        Int      @id @default(autoincrement())
+  name      String
+  status    String   @default("Active")
+  updatedAt DateTime @default(now()) @db.Timestamptz(6)
+}

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import { SignJWT } from "jose";
 import { db } from "@/src/prisma/db";
+import { StatusCodes, ErrorMessages, apiError } from "@/lib/errors";
 
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
 
@@ -11,30 +12,21 @@ export async function POST(request: Request) {
     const { email, password } = body;
 
     if (!email || !password) {
-      return NextResponse.json(
-        { error: "Email and password are required" },
-        { status: 400 }
-      );
+      return apiError(ErrorMessages.EMAIL_PASSWORD_REQUIRED, StatusCodes.BAD_REQUEST);
     }
 
-    const user = await db.orm.public.User
-      .where((u) => u.email.eq(email))
-      .first();
+    const user = await db.user.findUnique({
+      where: { email },
+    });
 
     if (!user) {
-      return NextResponse.json(
-        { error: "Invalid email or password" },
-        { status: 401 }
-      );
+      return apiError(ErrorMessages.INVALID_CREDENTIALS, StatusCodes.UNAUTHORIZED);
     }
 
     const isValidPassword = await bcrypt.compare(password, user.password);
 
     if (!isValidPassword) {
-      return NextResponse.json(
-        { error: "Invalid email or password" },
-        { status: 401 }
-      );
+      return apiError(ErrorMessages.INVALID_CREDENTIALS, StatusCodes.UNAUTHORIZED);
     }
 
     const token = await new SignJWT({ userId: user.id, email: user.email })
@@ -63,9 +55,6 @@ export async function POST(request: Request) {
     return response;
   } catch (error) {
     console.error("Login error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return apiError(ErrorMessages.INTERNAL_SERVER_ERROR, StatusCodes.INTERNAL_SERVER_ERROR);
   }
 }

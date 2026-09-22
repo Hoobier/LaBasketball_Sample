@@ -1,13 +1,14 @@
 import { NextResponse } from "next/server";
 import { db } from "@/src/prisma/db";
+import { StatusCodes, ErrorMessages, apiError } from "@/lib/errors";
 
 export async function GET() {
   try {
-    const schedules = await db.orm.public.Schedule.all();
+    const schedules = await db.schedule.findMany();
     return NextResponse.json({ schedules });
   } catch (error) {
     console.error("Get schedules error:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return apiError(ErrorMessages.INTERNAL_SERVER_ERROR, StatusCodes.INTERNAL_SERVER_ERROR);
   }
 }
 
@@ -17,22 +18,24 @@ export async function POST(request: Request) {
     const { title, date, time, court, team, type } = body;
 
     if (!title || !date || !time || !court || !team) {
-      return NextResponse.json({ error: "All fields are required" }, { status: 400 });
+      return apiError(ErrorMessages.ALL_FIELDS_REQUIRED, StatusCodes.BAD_REQUEST);
     }
 
-    const schedule = await db.orm.public.Schedule.create({
-      title,
-      date,
-      time,
-      court,
-      team,
-      type: type || "Game",
+    const schedule = await db.schedule.create({
+      data: {
+        title,
+        date,
+        time,
+        court,
+        team,
+        type: type || "Game",
+      },
     });
 
-    return NextResponse.json({ schedule }, { status: 201 });
+    return NextResponse.json({ schedule }, { status: StatusCodes.CREATED });
   } catch (error) {
     console.error("Create schedule error:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return apiError(ErrorMessages.INTERNAL_SERVER_ERROR, StatusCodes.INTERNAL_SERVER_ERROR);
   }
 }
 
@@ -42,17 +45,18 @@ export async function PUT(request: Request) {
     const { id, title, date, time, court, team, type } = body;
 
     if (!id) {
-      return NextResponse.json({ error: "ID is required" }, { status: 400 });
+      return apiError(ErrorMessages.ID_REQUIRED, StatusCodes.BAD_REQUEST);
     }
 
-    const schedule = await db.orm.public.Schedule
-      .where((s) => s.id.eq(id))
-      .update({ title, date, time, court, team, type });
+    const schedule = await db.schedule.update({
+      where: { id },
+      data: { title, date, time, court, team, type },
+    });
 
     return NextResponse.json({ schedule });
   } catch (error) {
     console.error("Update schedule error:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return apiError(ErrorMessages.INTERNAL_SERVER_ERROR, StatusCodes.INTERNAL_SERVER_ERROR);
   }
 }
 
@@ -62,14 +66,14 @@ export async function DELETE(request: Request) {
     const id = searchParams.get("id");
 
     if (!id) {
-      return NextResponse.json({ error: "ID is required" }, { status: 400 });
+      return apiError(ErrorMessages.ID_REQUIRED, StatusCodes.BAD_REQUEST);
     }
 
-    await db.orm.public.Schedule.where((s) => s.id.eq(parseInt(id))).delete();
+    await db.schedule.delete({ where: { id: parseInt(id) } });
 
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Delete schedule error:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return apiError(ErrorMessages.INTERNAL_SERVER_ERROR, StatusCodes.INTERNAL_SERVER_ERROR);
   }
 }

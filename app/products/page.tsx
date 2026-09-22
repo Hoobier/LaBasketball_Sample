@@ -25,8 +25,9 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Pencil, Trash2, Package, DollarSign, Search } from "lucide-react";
+import { Plus, Pencil, Trash2, Package, DollarSign, Search, ShoppingCart } from "lucide-react";
 import { useAuth } from "@/app/contexts/AuthContext";
+import { useCart } from "@/app/contexts/CartContext";
 
 const productSchema = z.object({
   name: z.string().min(1, "Product name is required").max(100),
@@ -70,6 +71,7 @@ function stockBadgeVariant(status: Product["status"]) {
 export default function ProductsPage() {
   const { user } = useAuth();
   const isAdmin = user?.role === "admin";
+  const { addItem } = useCart();
   const [products, setProducts] = useState<Product[]>([]);
   const [addOpen, setAddOpen] = useState(false);
   const [editProduct, setEditProduct] = useState<Product | null>(null);
@@ -276,13 +278,28 @@ export default function ProductsPage() {
                   </div>
                 </div>
               </CardContent>
-              {isAdmin && (
+              {isAdmin ? (
                 <CardFooter className="gap-2">
                   <Button variant="outline" size="sm" className="flex-1" onClick={() => openEdit(product)}>
                     <Pencil className="mr-1 h-3.5 w-3.5" />Edit
                   </Button>
                   <Button variant="outline" size="sm" className="flex-1 text-destructive hover:text-destructive" onClick={() => setDeleteProduct(product)}>
                     <Trash2 className="mr-1 h-3.5 w-3.5" />Delete
+                  </Button>
+                </CardFooter>
+              ) : (
+                <CardFooter>
+                  <Button
+                    size="sm"
+                    className="w-full"
+                    disabled={product.stock === 0}
+                    onClick={() => {
+                      addItem(product);
+                      toast.success("Added to cart", { description: `"${product.name}" has been added to your cart.` });
+                    }}
+                  >
+                    <ShoppingCart className="mr-1 h-3.5 w-3.5" />
+                    {product.stock === 0 ? "Out of Stock" : "Add to Cart"}
                   </Button>
                 </CardFooter>
               )}

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 import { db } from "@/src/prisma/db";
+import { StatusCodes, ErrorMessages, apiError } from "@/lib/errors";
 
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
 
@@ -12,17 +13,17 @@ export async function GET(request: Request) {
       : null;
 
     if (!token) {
-      return NextResponse.json({ error: "No token provided" }, { status: 401 });
+      return apiError(ErrorMessages.NO_TOKEN, StatusCodes.UNAUTHORIZED);
     }
 
     const { payload } = await jwtVerify(token, JWT_SECRET);
 
-    const user = await db.orm.public.User
-      .where((u) => u.id.eq(payload.userId as number))
-      .first();
+    const user = await db.user.findUnique({
+      where: { id: payload.userId as number },
+    });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 401 });
+      return apiError(ErrorMessages.USER_NOT_FOUND, StatusCodes.UNAUTHORIZED);
     }
 
     return NextResponse.json({
@@ -35,6 +36,6 @@ export async function GET(request: Request) {
     });
   } catch (error) {
     console.error("Auth verification error:", error);
-    return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+    return apiError(ErrorMessages.INVALID_TOKEN, StatusCodes.UNAUTHORIZED);
   }
 }

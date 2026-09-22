@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 import { db } from "@/src/prisma/db";
+import { StatusCodes, ErrorMessages, apiError } from "@/lib/errors";
 
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
 
@@ -13,9 +14,9 @@ async function getUserFromRequest(request: Request) {
   }
 
   const { payload } = await jwtVerify(token, JWT_SECRET);
-  const user = await db.orm.public.User
-    .where((u) => u.id.eq(payload.userId as number))
-    .first();
+  const user = await db.user.findUnique({
+    where: { id: payload.userId as number },
+  });
 
   return user;
 }
@@ -25,7 +26,7 @@ export async function GET(request: Request) {
     const user = await getUserFromRequest(request);
 
     if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return apiError(ErrorMessages.UNAUTHORIZED, StatusCodes.UNAUTHORIZED);
     }
 
     return NextResponse.json({
@@ -39,7 +40,7 @@ export async function GET(request: Request) {
     });
   } catch (error) {
     console.error("Get profile error:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return apiError(ErrorMessages.INTERNAL_SERVER_ERROR, StatusCodes.INTERNAL_SERVER_ERROR);
   }
 }
 
@@ -48,29 +49,30 @@ export async function PUT(request: Request) {
     const user = await getUserFromRequest(request);
 
     if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return apiError(ErrorMessages.UNAUTHORIZED, StatusCodes.UNAUTHORIZED);
     }
 
     const body = await request.json();
     const { name, email } = body;
 
     if (!name || !email) {
-      return NextResponse.json({ error: "Name and email are required" }, { status: 400 });
+      return apiError(ErrorMessages.NAME_EMAIL_REQUIRED, StatusCodes.BAD_REQUEST);
     }
 
     if (email !== user.email) {
-      const existingUser = await db.orm.public.User
-        .where((u) => u.email.eq(email))
-        .first();
+      const existingUser = await db.user.findUnique({
+        where: { email },
+      });
 
       if (existingUser) {
-        return NextResponse.json({ error: "Email already in use" }, { status: 409 });
+        return apiError(ErrorMessages.EMAIL_IN_USE, StatusCodes.CONFLICT);
       }
     }
 
-    await db.orm.public.User
-      .where((u) => u.id.eq(user.id))
-      .update({ name, email });
+    await db.user.update({
+      where: { id: user.id },
+      data: { name, email },
+    });
 
     return NextResponse.json({
       user: {
@@ -82,6 +84,6 @@ export async function PUT(request: Request) {
     });
   } catch (error) {
     console.error("Update profile error:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return apiError(ErrorMessages.INTERNAL_SERVER_ERROR, StatusCodes.INTERNAL_SERVER_ERROR);
   }
 }

@@ -1,14 +1,15 @@
 import { NextResponse } from "next/server";
 import { db } from "@/src/prisma/db";
+import { StatusCodes, ErrorMessages, apiError } from "@/lib/errors";
 
 export async function GET() {
   try {
     const [slots, schedules, venues, products, users] = await Promise.all([
-      db.orm.public.Slot.all(),
-      db.orm.public.Schedule.all(),
-      db.orm.public.Venue.all(),
-      db.orm.public.Product.all(),
-      db.orm.public.User.all(),
+      db.slot.findMany(),
+      db.schedule.findMany(),
+      db.venue.findMany(),
+      db.product.findMany(),
+      db.user.findMany(),
     ]);
 
     const availableSlots = slots.filter((s) => s.status === "Available").length;
@@ -53,6 +54,6 @@ export async function GET() {
     });
   } catch (error) {
     console.error("Dashboard error:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return apiError(ErrorMessages.INTERNAL_SERVER_ERROR, StatusCodes.INTERNAL_SERVER_ERROR);
   }
 }

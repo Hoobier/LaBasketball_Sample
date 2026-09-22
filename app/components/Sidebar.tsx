@@ -16,6 +16,7 @@ import {
   Trophy,
   X,
   ShoppingBag,
+  Package,
   PanelLeftClose,
   PanelLeftOpen,
 } from "lucide-react";
@@ -40,6 +41,7 @@ const navItems = [
   { name: "Schedules", href: "/schedules", icon: Calendar },
   { name: "Venue", href: "/venue", icon: MapPin },
   { name: "Products", href: "/products", icon: ShoppingBag },
+  { name: "Orders", href: "/orders", icon: Package },
   { name: "Settings", href: "/settings", icon: Settings },
 ];
 

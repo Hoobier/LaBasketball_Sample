@@ -1,13 +1,14 @@
 import { NextResponse } from "next/server";
 import { db } from "@/src/prisma/db";
+import { StatusCodes, ErrorMessages, apiError } from "@/lib/errors";
 
 export async function GET() {
   try {
-    const venues = await db.orm.public.Venue.all();
+    const venues = await db.venue.findMany();
     return NextResponse.json({ venues });
   } catch (error) {
     console.error("Get venues error:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return apiError(ErrorMessages.INTERNAL_SERVER_ERROR, StatusCodes.INTERNAL_SERVER_ERROR);
   }
 }
 
@@ -17,21 +18,23 @@ export async function POST(request: Request) {
     const { name, address, courts, capacity, status } = body;
 
     if (!name || !address) {
-      return NextResponse.json({ error: "Name and address are required" }, { status: 400 });
+      return apiError(ErrorMessages.NAME_ADDRESS_REQUIRED, StatusCodes.BAD_REQUEST);
     }
 
-    const venue = await db.orm.public.Venue.create({
-      name,
-      address,
-      courts: courts || 1,
-      capacity: capacity || 0,
-      status: status || "Active",
+    const venue = await db.venue.create({
+      data: {
+        name,
+        address,
+        courts: courts || 1,
+        capacity: capacity || 0,
+        status: status || "Active",
+      },
     });
 
-    return NextResponse.json({ venue }, { status: 201 });
+    return NextResponse.json({ venue }, { status: StatusCodes.CREATED });
   } catch (error) {
     console.error("Create venue error:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return apiError(ErrorMessages.INTERNAL_SERVER_ERROR, StatusCodes.INTERNAL_SERVER_ERROR);
   }
 }
 
@@ -41,17 +44,18 @@ export async function PUT(request: Request) {
     const { id, name, address, courts, capacity, status } = body;
 
     if (!id) {
-      return NextResponse.json({ error: "ID is required" }, { status: 400 });
+      return apiError(ErrorMessages.ID_REQUIRED, StatusCodes.BAD_REQUEST);
     }
 
-    const venue = await db.orm.public.Venue
-      .where((v) => v.id.eq(id))
-      .update({ name, address, courts, capacity, status });
+    const venue = await db.venue.update({
+      where: { id },
+      data: { name, address, courts, capacity, status },
+    });
 
     return NextResponse.json({ venue });
   } catch (error) {
     console.error("Update venue error:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return apiError(ErrorMessages.INTERNAL_SERVER_ERROR, StatusCodes.INTERNAL_SERVER_ERROR);
   }
 }
 
@@ -61,14 +65,14 @@ export async function DELETE(request: Request) {
     const id = searchParams.get("id");
 
     if (!id) {
-      return NextResponse.json({ error: "ID is required" }, { status: 400 });
+      return apiError(ErrorMessages.ID_REQUIRED, StatusCodes.BAD_REQUEST);
     }
 
-    await db.orm.public.Venue.where((v) => v.id.eq(parseInt(id))).delete();
+    await db.venue.delete({ where: { id: parseInt(id) } });
 
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Delete venue error:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return apiError(ErrorMessages.INTERNAL_SERVER_ERROR, StatusCodes.INTERNAL_SERVER_ERROR);
   }
 }
