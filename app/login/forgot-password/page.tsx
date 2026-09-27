@@ -4,16 +4,10 @@ import Link from "next/link";
 import { useState } from "react";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Trophy, ArrowLeft, Mail } from "lucide-react";
+import { ArrowLeft, Mail } from "lucide-react";
+import AuthShell from "@/app/components/auth/AuthShell";
 
 const forgotPasswordSchema = z.object({
   email: z.string().min(1, "Email is required").email("Please enter a valid email"),
@@ -50,26 +44,33 @@ export default function ForgotPasswordPage() {
 
   if (submitted) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background p-4">
-        <Card className="w-full max-w-md">
-          <CardHeader className="space-y-1 text-center">
-            <div className="flex justify-center mb-2">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary">
-                <Mail className="h-6 w-6 text-primary-foreground" />
-              </div>
-            </div>
-            <CardTitle className="text-2xl font-bold">Check your email</CardTitle>
-            <CardDescription>
-              We sent a password reset link to <span className="font-medium text-foreground">{formData.email}</span>
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-center text-sm text-muted-foreground">
-              Didn&apos;t receive the email? Check your spam folder or try again.
-            </p>
+      <AuthShell
+        eyebrow="Recovery"
+        title={"Check\nyour inbox"}
+        tagline="We sent a password reset link to get you back on the court."
+      >
+        <div>
+          <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-court">
+            <Mail className="h-6 w-6 text-black" />
+          </div>
+          <h2 className="font-display text-4xl uppercase sm:text-5xl">
+            Check your email
+          </h2>
+          <p className="mt-3 text-sm text-muted-foreground">
+            We sent a password reset link to{" "}
+            <span className="font-semibold text-foreground">
+              {formData.email}
+            </span>
+            .
+          </p>
+          <p className="mt-4 text-sm text-muted-foreground">
+            Didn&apos;t receive the email? Check your spam folder or try again.
+          </p>
+
+          <div className="mt-8 space-y-4">
             <Button
               variant="outline"
-              className="w-full"
+              className="h-11 w-full rounded-full"
               onClick={() => {
                 setSubmitted(false);
                 setFormData({ email: "" });
@@ -79,61 +80,65 @@ export default function ForgotPasswordPage() {
             </Button>
             <Link
               href="/login"
-              className="flex items-center justify-center gap-2 text-sm text-muted-foreground hover:text-primary"
+              className="flex items-center justify-center gap-2 text-sm text-muted-foreground hover:text-court"
             >
               <ArrowLeft className="h-4 w-4" />
               Back to sign in
             </Link>
-          </CardContent>
-        </Card>
-      </div>
+          </div>
+        </div>
+      </AuthShell>
     );
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1 text-center">
-          <div className="flex justify-center mb-2">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary">
-              <Trophy className="h-6 w-6 text-primary-foreground" />
-            </div>
-          </div>
-          <CardTitle className="text-2xl font-bold">Forgot password?</CardTitle>
-          <CardDescription>
-            Enter your email and we&apos;ll send you a reset link
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="name@example.com"
-                value={formData.email}
-                onChange={(e) => handleChange("email", e.target.value)}
-                className={errors.email ? "border-destructive" : ""}
-              />
-              {errors.email && (
-                <p className="text-sm text-destructive">{errors.email}</p>
-              )}
-            </div>
-            <Button type="submit" className="w-full">
-              Send reset link
-            </Button>
-          </form>
+    <AuthShell
+      eyebrow="Recovery"
+      title={"Reset\nyour game"}
+      tagline="Enter your email and we'll send you a reset link to get you back on the court."
+    >
+      <div>
+        <p className="mb-3 text-xs font-semibold uppercase tracking-[0.3em] text-court">
+          Forgot password
+        </p>
+        <h2 className="font-display text-4xl uppercase sm:text-5xl">
+          Find your way back
+        </h2>
+        <p className="mt-3 text-sm text-muted-foreground">
+          Enter your email and we&apos;ll send you a reset link.
+        </p>
 
-          <Link
-            href="/login"
-            className="flex items-center justify-center gap-2 text-sm text-muted-foreground hover:text-primary"
+        <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+          <div className="grid gap-2">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="name@example.com"
+              value={formData.email}
+              onChange={(e) => handleChange("email", e.target.value)}
+              className={`h-11 rounded-xl px-4 ${errors.email ? "border-destructive" : ""}`}
+            />
+            {errors.email && (
+              <p className="text-sm text-destructive">{errors.email}</p>
+            )}
+          </div>
+          <Button
+            type="submit"
+            className="h-11 w-full rounded-full bg-court text-sm font-bold uppercase tracking-wide text-black hover:bg-court/90"
           >
-            <ArrowLeft className="h-4 w-4" />
-            Back to sign in
-          </Link>
-        </CardContent>
-      </Card>
-    </div>
+            Send reset link
+          </Button>
+        </form>
+
+        <Link
+          href="/login"
+          className="mt-6 flex items-center justify-center gap-2 text-sm text-muted-foreground hover:text-court"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to sign in
+        </Link>
+      </div>
+    </AuthShell>
   );
 }

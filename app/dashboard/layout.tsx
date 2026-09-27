@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Sign Up - L.A Basketball",
-};
+export const metadata: Metadata = { title: "Dashboard - L.A Basketball" };
 
-export default function SignupLayout({
+export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;

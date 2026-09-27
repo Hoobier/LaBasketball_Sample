@@ -7,16 +7,10 @@ import { z } from "zod";
 import { toast } from "sonner";
 import { useAuth } from "@/app/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Trophy, Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
+import AuthShell from "@/app/components/auth/AuthShell";
 
 const loginSchema = z.object({
   email: z.string().min(1, "Email is required").email("Please enter a valid email"),
@@ -78,7 +72,7 @@ export default function LoginPage() {
       toast.success("Welcome back!", {
         description: "You have successfully signed in.",
       });
-      router.push("/");
+      router.push("/dashboard");
     } catch {
       toast.error("An error occurred. Please try again.");
     } finally {
@@ -87,86 +81,93 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1 text-center">
-          <div className="flex justify-center mb-2">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary">
-              <Trophy className="h-6 w-6 text-primary-foreground" />
-            </div>
-          </div>
-          <CardTitle className="text-2xl font-bold">Welcome back</CardTitle>
-          <CardDescription>
-            Sign in to your LaBasketball account
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="name@example.com"
-                value={formData.email}
-                onChange={(e) => handleChange("email", e.target.value)}
-                className={errors.email ? "border-destructive" : ""}
-              />
-              {errors.email && (
-                <p className="text-sm text-destructive">{errors.email}</p>
-              )}
-            </div>
-            <div className="grid gap-2">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="password">Password</Label>
-                <Link
-                  href="/login/forgot-password"
-                  className="text-xs text-muted-foreground hover:text-primary"
-                >
-                  Forgot password?
-                </Link>
-              </div>
-              <div className="relative">
-                <Input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Enter your password"
-                  value={formData.password}
-                  onChange={(e) => handleChange("password", e.target.value)}
-                  className={errors.password ? "border-destructive" : ""}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                >
-                  {showPassword ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
-                  )}
-                </button>
-              </div>
-              {errors.password && (
-                <p className="text-sm text-destructive">{errors.password}</p>
-              )}
-            </div>
-            <Button type="submit" className="w-full" disabled={isSubmitting}>
-              {isSubmitting ? "Signing In..." : "Sign In"}
-            </Button>
-          </form>
+    <AuthShell
+      eyebrow="Member access"
+      title={"Welcome\nback"}
+      tagline="Sign in to book courts, catch the weekly runs and pick up the latest gear drops."
+    >
+      <div>
+        <p className="mb-3 text-xs font-semibold uppercase tracking-[0.3em] text-court">
+          Sign in
+        </p>
+        <h2 className="font-display text-4xl uppercase sm:text-5xl">
+          Let&apos;s play
+        </h2>
+        <p className="mt-3 text-sm text-muted-foreground">
+          Welcome back — the court missed you.
+        </p>
 
-          <p className="text-center text-sm text-muted-foreground">
-            Don&apos;t have an account?{" "}
-            <Link
-              href="/signup"
-              className="font-medium text-primary hover:underline"
-            >
-              Sign up
-            </Link>
-          </p>
-        </CardContent>
-      </Card>
-    </div>
+        <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+          <div className="grid gap-2">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="name@example.com"
+              value={formData.email}
+              onChange={(e) => handleChange("email", e.target.value)}
+              className={`h-11 rounded-xl px-4 ${errors.email ? "border-destructive" : ""}`}
+            />
+            {errors.email && (
+              <p className="text-sm text-destructive">{errors.email}</p>
+            )}
+          </div>
+
+          <div className="grid gap-2">
+            <div className="flex items-center justify-between">
+              <Label htmlFor="password">Password</Label>
+              <Link
+                href="/login/forgot-password"
+                className="text-xs text-muted-foreground hover:text-court"
+              >
+                Forgot password?
+              </Link>
+            </div>
+            <div className="relative">
+              <Input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter your password"
+                value={formData.password}
+                onChange={(e) => handleChange("password", e.target.value)}
+                className={`h-11 rounded-xl px-4 pr-11 ${errors.password ? "border-destructive" : ""}`}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              >
+                {showPassword ? (
+                  <EyeOff className="h-4 w-4" />
+                ) : (
+                  <Eye className="h-4 w-4" />
+                )}
+              </button>
+            </div>
+            {errors.password && (
+              <p className="text-sm text-destructive">{errors.password}</p>
+            )}
+          </div>
+
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            className="h-11 w-full rounded-full bg-court text-sm font-bold uppercase tracking-wide text-black hover:bg-court/90"
+          >
+            {isSubmitting ? "Signing In..." : "Sign In"}
+          </Button>
+        </form>
+
+        <p className="mt-6 text-center text-sm text-muted-foreground">
+          Don&apos;t have an account?{" "}
+          <Link
+            href="/signup"
+            className="font-semibold text-court hover:underline"
+          >
+            Join the run
+          </Link>
+        </p>
+      </div>
+    </AuthShell>
   );
 }
