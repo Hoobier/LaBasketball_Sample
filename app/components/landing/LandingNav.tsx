@@ -2,7 +2,7 @@
 
 import { useState, useSyncExternalStore } from "react";
 import Link from "next/link";
-import { Trophy, ShoppingCart, Menu, X } from "lucide-react";
+import { ShoppingCart, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/app/components/ThemeToggle";
 import CartSheet from "@/app/components/CartSheet";
@@ -37,13 +37,10 @@ export default function LandingNav() {
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-2 px-4 sm:gap-4 sm:px-6 lg:px-8">
         {/* Brand */}
-        <Link href="/" className="flex items-center gap-2.5">
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-court">
-            <Trophy className="h-5 w-5 text-black" />
-          </span>
-          <span className="font-display text-lg uppercase tracking-wide max-[400px]:hidden">
-            L.A Basketball
-          </span>
+<Link href="/" className="flex items-center gap-2.5">
+            <span className="font-display text-lg uppercase tracking-wide max-[400px]:hidden">
+              L.A Basketball
+            </span>
         </Link>
 
         {/* Center links */}
@@ -78,19 +75,20 @@ export default function LandingNav() {
           </Button>
 
           {mounted && token ? (
-            <Button render={<Link href="/dashboard" />} className="hidden sm:inline-flex">
+            <Button nativeButton={false} render={<Link href="/dashboard" />} className="hidden sm:inline-flex">
               Dashboard
             </Button>
           ) : (
             <>
               <Button
                 variant="ghost"
+                nativeButton={false}
                 render={<Link href="/login" />}
                 className="hidden sm:inline-flex"
               >
                 Sign in
               </Button>
-              <Button render={<Link href="/signup" />} className="bg-court text-black hover:bg-court/90">
+              <Button nativeButton={false} render={<Link href="/signup" />} className="bg-court text-black hover:bg-court/90">
                 Join
               </Button>
             </>

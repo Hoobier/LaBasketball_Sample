@@ -45,6 +45,7 @@ export default function MembershipCTA() {
           <div className="mt-9 flex flex-wrap gap-3">
             <Button
               size="lg"
+              nativeButton={false}
               render={<Link href="/signup" />}
               className="h-12 rounded-full bg-court px-8 text-sm font-bold uppercase tracking-wide text-black hover:bg-court/90"
             >
@@ -54,6 +55,7 @@ export default function MembershipCTA() {
             <Button
               size="lg"
               variant="outline"
+              nativeButton={false}
               render={<Link href="/login" />}
               className="h-12 rounded-full px-8 text-sm font-bold uppercase tracking-wide"
             >

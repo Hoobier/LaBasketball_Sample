@@ -231,7 +231,21 @@ export default function ProductsPage() {
               Manage products and merchandise for your users.
             </p>
           </div>
-          <Basketball className="hidden h-auto w-24 shrink-0 animate-float sm:block lg:w-32" />
+          <div className="flex shrink-0 items-center gap-4">
+            {isAdmin && (
+              <Button
+                onClick={() => {
+                  resetForm();
+                  setAddOpen(true);
+                }}
+                className="h-11 rounded-full bg-court px-6 text-sm font-bold uppercase tracking-wide text-black hover:bg-court/90"
+              >
+                <Plus className="h-4 w-4" />
+                Add Product
+              </Button>
+            )}
+            <Basketball className="hidden h-auto w-24 shrink-0 animate-float sm:block lg:w-32" />
+          </div>
         </div>
       </section>
 

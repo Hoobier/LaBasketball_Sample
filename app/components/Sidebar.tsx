@@ -13,7 +13,6 @@ import {
   Settings,
   LogOut,
   Menu,
-  Trophy,
   X,
   ShoppingBag,
   Package,
@@ -71,15 +70,12 @@ function SidebarContent({
   return (
     <div className="flex h-full flex-col">
       {/* Header */}
-      <div
-        className={cn(
-          "flex h-14 items-center gap-2 border-b px-4",
-          collapsed && "justify-center px-2"
-        )}
-      >
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary">
-          <Trophy className="h-4 w-4 text-primary-foreground" />
-        </div>
+<div
+         className={cn(
+           "flex h-14 items-center gap-2 border-b px-4",
+           collapsed && "justify-center px-2"
+         )}
+       >
         {!collapsed && (
           <span className="text-lg font-semibold">L.A Basketball</span>
         )}
@@ -212,12 +208,9 @@ export default function Sidebar() {
               <Menu className="h-5 w-5" />
             )}
           </Button>
-          <div className="flex items-center gap-2">
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary">
-              <Trophy className="h-3.5 w-3.5 text-primary-foreground" />
-            </div>
-            <span className="font-semibold">LaBasketball</span>
-          </div>
+<div className="flex items-center gap-2">
+             <span className="font-semibold">LaBasketball</span>
+           </div>
         </div>
         <ThemeToggle />
       </div>

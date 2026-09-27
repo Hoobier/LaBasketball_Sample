@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Trophy } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Basketball from "@/app/components/landing/Basketball";
 import CourtBackdrop from "@/app/components/landing/CourtBackdrop";
@@ -15,16 +14,6 @@ interface AuthShellProps {
 function BrandMark({ dark }: { dark?: boolean }) {
   return (
     <Link href="/" className="flex items-center gap-2.5">
-      <span
-        className={cn(
-          "flex h-9 w-9 items-center justify-center rounded-lg",
-          dark ? "bg-court" : "bg-primary"
-        )}
-      >
-        <Trophy
-          className={cn("h-5 w-5", dark ? "text-black" : "text-primary-foreground")}
-        />
-      </span>
       <span
         className={cn(
           "font-display text-lg uppercase tracking-wide",
@@ -70,7 +59,7 @@ export default function AuthShell({
 
         <div className="flex items-end justify-between">
           <p className="text-xs uppercase tracking-widest text-white/40">
-            Los Angeles · Hoops · Gear
+            LA Basketball · Hoops · Gear
           </p>
           <Basketball className="h-auto w-24 animate-float" />
         </div>
