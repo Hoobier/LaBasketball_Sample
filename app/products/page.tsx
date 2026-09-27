@@ -28,6 +28,8 @@ import { Badge } from "@/components/ui/badge";
 import { Plus, Pencil, Trash2, Package, DollarSign, Search, ShoppingCart } from "lucide-react";
 import { useAuth } from "@/app/contexts/AuthContext";
 import { useCart } from "@/app/contexts/CartContext";
+import Basketball from "@/app/components/landing/Basketball";
+import CourtBackdrop from "@/app/components/landing/CourtBackdrop";
 
 const productSchema = z.object({
   name: z.string().min(1, "Product name is required").max(100),
@@ -179,7 +181,7 @@ export default function ProductsPage() {
       const response = await fetch(`/api/products?id=${deleteProduct.id}`, { method: "DELETE" });
       if (!response.ok) throw new Error();
       const name = deleteProduct.name;
-      setProducts((prev) => prev.filter((p) => p.id !== deleteProduct.id));
+      setProducts((prev) => prev.filter((p) => p.id === deleteProduct.id));
       setDeleteProduct(null);
       toast.success("Product deleted", { description: `"${name}" has been removed from your products.` });
     } catch {
@@ -195,6 +197,17 @@ export default function ProductsPage() {
   if (loading) {
     return (
       <div className="p-4 sm:p-6 lg:p-8">
+        <div className="relative mb-6 overflow-hidden rounded-3xl bg-black p-6 text-white sm:p-10">
+          <CourtBackdrop />
+          <div className="pointer-events-none absolute -top-24 -right-16 h-80 w-80 rounded-full bg-court/25 blur-[100px]" aria-hidden="true" />
+          <div className="relative">
+            <p className="mb-3 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.35em] text-court">
+              <span className="h-px w-10 bg-court" />
+              Merch
+            </p>
+            <h1 className="font-display text-[clamp(2rem,5vw,3.75rem)] leading-[0.95] uppercase">Products</h1>
+          </div>
+        </div>
         <div className="flex items-center justify-center py-12">
           <p className="text-muted-foreground">Loading products...</p>
         </div>
@@ -203,37 +216,42 @@ export default function ProductsPage() {
   }
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8">
-      <div className="mb-6 sm:mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Products</h1>
-          <p className="text-muted-foreground text-sm sm:text-base">Manage products and merchandise for your users</p>
+    <div className="space-y-6 p-4 sm:p-6 lg:p-8">
+      <section className="relative overflow-hidden rounded-3xl bg-black p-6 text-white sm:p-10">
+        <CourtBackdrop />
+        <div className="pointer-events-none absolute -top-24 -right-16 h-80 w-80 rounded-full bg-court/25 blur-[100px]" aria-hidden="true" />
+        <div className="relative flex items-start justify-between">
+          <div>
+            <p className="mb-3 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.35em] text-court">
+              <span className="h-px w-10 bg-court" />
+              Merch
+            </p>
+            <h1 className="font-display text-[clamp(2rem,5vw,3.75rem)] leading-[0.95] uppercase">Products</h1>
+            <p className="mt-3 max-w-md text-sm leading-relaxed text-white/60">
+              Manage products and merchandise for your users.
+            </p>
+          </div>
+          <Basketball className="hidden h-auto w-24 shrink-0 animate-float sm:block lg:w-32" />
         </div>
-        {isAdmin && (
-          <Button className="w-full sm:w-auto" onClick={() => { resetForm(); setAddOpen(true); }}>
-            <Plus className="mr-2 h-4 w-4" />
-            Add Product
-          </Button>
-        )}
-      </div>
+      </section>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 mb-6">
-        <Card>
+        <Card className="rounded-2xl">
           <CardHeader className="pb-2">
-            <CardDescription>Total Products</CardDescription>
-            <CardTitle className="text-2xl">{products.length}</CardTitle>
+            <CardDescription className="text-xs font-semibold uppercase tracking-[0.2em]">Total Products</CardDescription>
+            <CardTitle className="font-display text-4xl">{products.length}</CardTitle>
           </CardHeader>
         </Card>
-        <Card>
+        <Card className="rounded-2xl border-green-500/30 bg-green-500/5">
           <CardHeader className="pb-2">
-            <CardDescription>In Stock</CardDescription>
-            <CardTitle className="text-2xl text-green-600">{products.filter((p) => p.status === "In Stock").length}</CardTitle>
+            <CardDescription className="text-xs font-semibold uppercase tracking-[0.2em]">In Stock</CardDescription>
+            <CardTitle className="font-display text-4xl text-green-600">{products.filter((p) => p.status === "In Stock").length}</CardTitle>
           </CardHeader>
         </Card>
-        <Card>
+        <Card className="rounded-2xl">
           <CardHeader className="pb-2">
-            <CardDescription>Total Value</CardDescription>
-            <CardTitle className="text-2xl">₱{products.reduce((sum, p) => sum + p.price * p.stock, 0).toFixed(2)}</CardTitle>
+            <CardDescription className="text-xs font-semibold uppercase tracking-[0.2em]">Total Value</CardDescription>
+            <CardTitle className="font-display text-4xl">₱{products.reduce((sum, p) => sum + p.price * p.stock, 0).toFixed(2)}</CardTitle>
           </CardHeader>
         </Card>
       </div>
@@ -244,7 +262,7 @@ export default function ProductsPage() {
       </div>
 
       {filteredProducts.length === 0 ? (
-        <Card>
+        <Card className="rounded-2xl">
           <CardContent className="flex flex-col items-center justify-center py-12">
             <Package className="h-12 w-12 text-muted-foreground mb-4" />
             <p className="text-lg font-medium">No products found</p>
@@ -254,8 +272,16 @@ export default function ProductsPage() {
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {filteredProducts.map((product) => (
-            <Card key={product.id}>
-              <CardHeader>
+            <Card key={product.id} className="rounded-2xl overflow-hidden hover:-translate-y-1 hover:border-court/40 transition-all duration-300">
+              <div className="relative flex aspect-square items-center justify-center bg-gradient-to-br from-court/90 via-[#c14f00] to-[#5a2200]">
+                <span className="font-display text-6xl uppercase text-black/70 transition-transform duration-500 hover:scale-110">
+                  {product.name.charAt(0)}
+                </span>
+                <div className="pointer-events-none absolute -bottom-2 -right-2">
+                  <Basketball className="h-16 w-16 opacity-20" />
+                </div>
+              </div>
+              <CardHeader className="pt-4">
                 <div className="flex items-start justify-between gap-2">
                   <CardTitle className="text-base sm:text-lg">{product.name}</CardTitle>
                   <Badge variant={stockBadgeVariant(product.status)}>{product.status}</Badge>
@@ -308,7 +334,6 @@ export default function ProductsPage() {
         </div>
       )}
 
-      {/* Add Product Dialog */}
       <Dialog open={addOpen} onOpenChange={setAddOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -354,7 +379,6 @@ export default function ProductsPage() {
         </DialogContent>
       </Dialog>
 
-      {/* Edit Product Dialog */}
       <Dialog open={editProduct !== null} onOpenChange={() => setEditProduct(null)}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -400,7 +424,6 @@ export default function ProductsPage() {
         </DialogContent>
       </Dialog>
 
-      {/* Delete Confirmation Dialog */}
       <Dialog open={deleteProduct !== null} onOpenChange={() => setDeleteProduct(null)}>
         <DialogContent>
           <DialogHeader>

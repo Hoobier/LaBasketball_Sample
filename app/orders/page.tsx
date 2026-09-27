@@ -34,6 +34,8 @@ import {
   Truck,
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import Basketball from "@/app/components/landing/Basketball";
+import CourtBackdrop from "@/app/components/landing/CourtBackdrop";
 
 interface OrderItem {
   id: number;
@@ -142,6 +144,17 @@ export default function OrdersPage() {
   if (loading) {
     return (
       <div className="p-4 sm:p-6 lg:p-8">
+        <div className="relative mb-6 overflow-hidden rounded-3xl bg-black p-6 text-white sm:p-10">
+          <CourtBackdrop />
+          <div className="pointer-events-none absolute -top-24 -right-16 h-80 w-80 rounded-full bg-court/25 blur-[100px]" aria-hidden="true" />
+          <div className="relative">
+            <p className="mb-3 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.35em] text-court">
+              <span className="h-px w-10 bg-court" />
+              Orders
+            </p>
+            <h1 className="font-display text-[clamp(2rem,5vw,3.75rem)] leading-[0.95] uppercase">Orders</h1>
+          </div>
+        </div>
         <div className="flex items-center justify-center py-12">
           <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
         </div>
@@ -150,45 +163,54 @@ export default function OrdersPage() {
   }
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8">
-      <div className="mb-6 sm:mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
-            {isAdmin ? "All Orders" : "My Orders"}
-          </h1>
-          <p className="text-muted-foreground text-sm sm:text-base">
-            {isAdmin ? "Manage customer orders" : "View your order history"}
-          </p>
+    <div className="space-y-6 p-4 sm:p-6 lg:p-8">
+      <section className="relative overflow-hidden rounded-3xl bg-black p-6 text-white sm:p-10">
+        <CourtBackdrop />
+        <div className="pointer-events-none absolute -top-24 -right-16 h-80 w-80 rounded-full bg-court/25 blur-[100px]" aria-hidden="true" />
+        <div className="relative flex items-start justify-between">
+          <div>
+            <p className="mb-3 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.35em] text-court">
+              <span className="h-px w-10 bg-court" />
+              Orders
+            </p>
+            <h1 className="font-display text-[clamp(2rem,5vw,3.75rem)] leading-[0.95] uppercase">
+              {isAdmin ? "All Orders" : "My Orders"}
+            </h1>
+            <p className="mt-3 max-w-md text-sm leading-relaxed text-white/60">
+              {isAdmin ? "Manage customer orders" : "View your order history"}
+            </p>
+          </div>
+          <Basketball className="hidden h-auto w-24 shrink-0 animate-float sm:block lg:w-32" />
         </div>
-      </div>
+      </section>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-4 mb-6">
-        <Card>
+        <Card className="rounded-2xl">
           <CardHeader className="pb-2">
-            <p className="text-sm text-muted-foreground">Total Orders</p>
-            <p className="text-2xl font-bold">{orders.length}</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Total Orders</p>
+            <p className="font-display text-4xl">{orders.length}</p>
           </CardHeader>
         </Card>
-        <Card>
+        <Card className="rounded-2xl border-yellow-500/30 bg-yellow-500/5">
           <CardHeader className="pb-2">
-            <p className="text-sm text-muted-foreground">Pending</p>
-            <p className="text-2xl font-bold text-yellow-600">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Pending</p>
+            <p className="font-display text-4xl text-yellow-600">
               {orders.filter((o) => o.status === "Pending").length}
             </p>
           </CardHeader>
         </Card>
-        <Card>
+        <Card className="rounded-2xl border-blue-500/30 bg-blue-500/5">
           <CardHeader className="pb-2">
-            <p className="text-sm text-muted-foreground">Processing</p>
-            <p className="text-2xl font-bold text-blue-600">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Processing</p>
+            <p className="font-display text-4xl text-blue-600">
               {orders.filter((o) => o.status === "Processing").length}
             </p>
           </CardHeader>
         </Card>
-        <Card>
+        <Card className="rounded-2xl border-green-500/30 bg-green-500/5">
           <CardHeader className="pb-2">
-            <p className="text-sm text-muted-foreground">Completed</p>
-            <p className="text-2xl font-bold text-green-600">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Completed</p>
+            <p className="font-display text-4xl text-green-600">
               {orders.filter((o) => o.status === "Completed").length}
             </p>
           </CardHeader>
@@ -206,7 +228,7 @@ export default function OrdersPage() {
       </div>
 
       {filteredOrders.length === 0 ? (
-        <Card>
+        <Card className="rounded-2xl">
           <CardContent className="flex flex-col items-center justify-center py-12">
             <Package className="h-12 w-12 text-muted-foreground mb-4" />
             <p className="text-lg font-medium">No orders found</p>
@@ -216,7 +238,7 @@ export default function OrdersPage() {
           </CardContent>
         </Card>
       ) : (
-        <Card>
+        <Card className="rounded-2xl">
           <Table>
             <TableHeader>
               <TableRow>
@@ -309,7 +331,6 @@ export default function OrdersPage() {
         </Card>
       )}
 
-      {/* Order Detail Dialog */}
       <Dialog open={selectedOrder !== null} onOpenChange={() => setSelectedOrder(null)}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>

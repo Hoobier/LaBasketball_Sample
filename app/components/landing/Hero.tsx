@@ -17,7 +17,7 @@ export default function Hero() {
       />
 
       <div className="relative mx-auto flex min-h-[calc(100svh-4rem)] max-w-7xl flex-col justify-center px-4 py-20 sm:px-6 lg:px-8">
-        <p className="mb-6 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.35em] text-court">
+        <p className="mb-6 flex flex-wrap items-center gap-3 text-xs font-semibold uppercase tracking-[0.35em] text-court">
           <span className="h-px w-10 bg-court" />
           L.A Basketball · Los Angeles
         </p>
