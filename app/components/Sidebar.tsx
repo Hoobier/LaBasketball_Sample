@@ -21,7 +21,6 @@ import {
   PanelLeftOpen,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "./ThemeToggle";
 import { useSettings } from "@/app/contexts/SettingsContext";
@@ -36,7 +35,7 @@ import {
 } from "@/components/ui/dialog";
 
 const navItems = [
-  { name: "Dashboard", href: "/", icon: LayoutDashboard },
+  { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { name: "Available Slot", href: "/available-slot", icon: CalendarCheck },
   { name: "Schedules", href: "/schedules", icon: Calendar },
   { name: "Venue", href: "/venue", icon: MapPin },

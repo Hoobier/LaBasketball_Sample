@@ -12,12 +12,17 @@ import CartSheet from "./CartSheet";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart } from "lucide-react";
 
-const authRoutes = ["/login", "/signup", "/login/forgot-password"];
+const shelllessRoutes = [
+  "/login",
+  "/signup",
+  "/login/forgot-password",
+  "/", // marketing landing page has its own nav/footer
+];
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { settings } = useSettings();
-  const isAuth = authRoutes.includes(pathname);
+  const isAuth = shelllessRoutes.includes(pathname);
   const { totalItems } = useCart();
   const [cartOpen, setCartOpen] = useState(false);
 
