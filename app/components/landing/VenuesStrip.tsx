@@ -52,11 +52,12 @@ export default function VenuesStrip() {
             <h2 className="font-display text-[clamp(2.25rem,6vw,4.5rem)] leading-[0.95] uppercase">
               Courts across
               <br />
-              Los Angeles
+              LA Basketball
             </h2>
           </div>
           <Button
             variant="outline"
+            nativeButton={false}
             render={<Link href="/venue" />}
             className="rounded-full"
           >
@@ -83,7 +84,7 @@ export default function VenuesStrip() {
             <MapPin className="mb-4 h-10 w-10 text-muted-foreground" />
             <p className="font-display text-2xl uppercase">Home court loading</p>
             <p className="mt-2 max-w-md text-sm text-muted-foreground">
-              New venues are being added across Los Angeles — book your first
+              New venues are being added across LA Basketball — book your first
               run while the map fills up.
             </p>
           </div>

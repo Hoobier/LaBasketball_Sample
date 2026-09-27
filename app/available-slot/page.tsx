@@ -88,11 +88,14 @@ export default function AvailableSlotPage() {
   const [errors, setErrors] = useState<Partial<Record<string, string>>>({});
   const [loading, setLoading] = useState(true);
   const [processingId, setProcessingId] = useState<number | null>(null);
+  const [selectedTab, setSelectedTab] = useState<string | null>(null);
 
   useEffect(() => {
     fetchSlots();
     fetchReservations();
   }, [token]);
+
+  const activeTab = selectedTab ?? (isAdmin ? "reservations" : "slots");
 
   const fetchSlots = async () => {
     try {
@@ -281,7 +284,21 @@ export default function AvailableSlotPage() {
               Manage court booking slots and availability across all venues.
             </p>
           </div>
-          <Basketball className="hidden h-auto w-24 shrink-0 animate-float sm:block lg:w-32" />
+          <div className="flex shrink-0 items-center gap-4">
+            {isAdmin && (
+              <Button
+                onClick={() => {
+                  resetForm();
+                  setAddOpen(true);
+                }}
+                className="h-11 rounded-full bg-court px-6 text-sm font-bold uppercase tracking-wide text-black hover:bg-court/90"
+              >
+                <Plus className="h-4 w-4" />
+                Add Slot
+              </Button>
+            )}
+            <Basketball className="hidden h-auto w-24 shrink-0 animate-float sm:block lg:w-32" />
+          </div>
         </div>
       </section>
 
@@ -322,7 +339,12 @@ export default function AvailableSlotPage() {
         </Card>
       </div>
 
-      <Tabs defaultValue={isAdmin ? "reservations" : "slots"}>
+      <Tabs
+        value={activeTab}
+        onValueChange={(value, details) => {
+          if (details.reason === "none") setSelectedTab(value);
+        }}
+      >
         <TabsList variant="line" className="w-full justify-start overflow-x-auto">
           <TabsTrigger value="slots">Slots</TabsTrigger>
           {isAdmin && (

@@ -19,7 +19,7 @@ export default function Hero() {
       <div className="relative mx-auto flex min-h-[calc(100svh-4rem)] max-w-7xl flex-col justify-center px-4 py-20 sm:px-6 lg:px-8">
         <p className="mb-6 flex flex-wrap items-center gap-3 text-xs font-semibold uppercase tracking-[0.35em] text-court">
           <span className="h-px w-10 bg-court" />
-          L.A Basketball · Los Angeles
+          L.A Basketball
         </p>
 
         <h1 className="font-display text-[clamp(3.25rem,13vw,10.5rem)] leading-[0.86] uppercase">
@@ -32,12 +32,13 @@ export default function Hero() {
 
         <p className="mt-8 max-w-xl text-base leading-relaxed text-white/70 sm:text-lg">
           Book courts in seconds, run with weekly games, and gear up with the
-          freshest drops. This is where Los Angeles comes to play.
+          freshest drops. This is where LA Basketball comes to play.
         </p>
 
         <div className="mt-10 flex flex-wrap items-center gap-4">
           <Button
             size="lg"
+            nativeButton={false}
             render={<Link href="/signup" />}
             className="h-12 rounded-full bg-court px-8 text-sm font-bold uppercase tracking-wide text-black hover:bg-court/90"
           >
@@ -47,6 +48,7 @@ export default function Hero() {
           <Button
             size="lg"
             variant="outline"
+            nativeButton={false}
             render={<Link href="/products" />}
             className="h-12 rounded-full border-white/40 bg-transparent px-8 text-sm font-bold uppercase tracking-wide text-white hover:bg-white hover:text-black"
           >

@@ -63,6 +63,7 @@ export default function GearShowcase() {
           </div>
           <Button
             variant="outline"
+            nativeButton={false}
             render={<Link href="/products" />}
             className="rounded-full"
           >
@@ -98,7 +99,7 @@ export default function GearShowcase() {
                 ? "We couldn't reach the store right now — check back in a minute."
                 : "New gear lands soon. Be the first on the court with it."}
             </p>
-            <Button render={<Link href="/products" />} className="mt-6 rounded-full">
+            <Button nativeButton={false} render={<Link href="/products" />} className="mt-6 rounded-full">
               Visit the store
             </Button>
           </div>

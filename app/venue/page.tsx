@@ -166,7 +166,21 @@ export default function VenuePage() {
               Manage your basketball venues and facilities across L.A.
             </p>
           </div>
-          <Basketball className="hidden h-auto w-24 shrink-0 animate-float sm:block lg:w-32" />
+          <div className="flex shrink-0 items-center gap-4">
+            {isAdmin && (
+              <Button
+                onClick={() => {
+                  resetForm();
+                  setAddOpen(true);
+                }}
+                className="h-11 rounded-full bg-court px-6 text-sm font-bold uppercase tracking-wide text-black hover:bg-court/90"
+              >
+                <Plus className="h-4 w-4" />
+                Add Venue
+              </Button>
+            )}
+            <Basketball className="hidden h-auto w-24 shrink-0 animate-float sm:block lg:w-32" />
+          </div>
         </div>
       </section>
 
@@ -238,7 +252,7 @@ export default function VenuePage() {
             </div>
             <div className="grid gap-2">
               <Label htmlFor="add-address">Address</Label>
-              <Input id="add-address" placeholder="e.g. 123 Main St, Los Angeles" value={formData.address} onChange={(e) => setFormData((p) => ({ ...p, address: e.target.value }))} className={errors.address ? "border-destructive" : ""} />
+              <Input id="add-address" placeholder="e.g. 123 Main St, LA Basketball" value={formData.address} onChange={(e) => setFormData((p) => ({ ...p, address: e.target.value }))} className={errors.address ? "border-destructive" : ""} />
               {errors.address && <p className="text-sm text-destructive">{errors.address}</p>}
             </div>
             <div className="grid grid-cols-2 gap-3">
