@@ -24,6 +24,8 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Clock, MapPin, Plus, Trash2 } from "lucide-react";
 import { useAuth } from "@/app/contexts/AuthContext";
+import Basketball from "@/app/components/landing/Basketball";
+import CourtBackdrop from "@/app/components/landing/CourtBackdrop";
 
 interface Schedule {
   id: number;
@@ -144,6 +146,17 @@ export default function SchedulesPage() {
   if (loading) {
     return (
       <div className="p-4 sm:p-6 lg:p-8">
+        <div className="relative mb-6 overflow-hidden rounded-3xl bg-black p-6 text-white sm:p-10">
+          <CourtBackdrop />
+          <div className="pointer-events-none absolute -top-24 -right-16 h-80 w-80 rounded-full bg-court/25 blur-[100px]" aria-hidden="true" />
+          <div className="relative">
+            <p className="mb-3 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.35em] text-court">
+              <span className="h-px w-10 bg-court" />
+              Events
+            </p>
+            <h1 className="font-display text-[clamp(2rem,5vw,3.75rem)] leading-[0.95] uppercase">Schedules</h1>
+          </div>
+        </div>
         <div className="flex items-center justify-center py-12">
           <p className="text-muted-foreground">Loading schedules...</p>
         </div>
@@ -152,23 +165,29 @@ export default function SchedulesPage() {
   }
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8">
-        <div className="mb-6 sm:mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="space-y-6 p-4 sm:p-6 lg:p-8">
+      {/* Hero Header */}
+      <section className="relative overflow-hidden rounded-3xl bg-black p-6 text-white sm:p-10">
+        <CourtBackdrop />
+        <div className="pointer-events-none absolute -top-24 -right-16 h-80 w-80 rounded-full bg-court/25 blur-[100px]" aria-hidden="true" />
+        <div className="relative flex items-start justify-between">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Schedules</h1>
-            <p className="text-muted-foreground text-sm sm:text-base">View and manage upcoming events and bookings</p>
+            <p className="mb-3 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.35em] text-court">
+              <span className="h-px w-10 bg-court" />
+              Events
+            </p>
+            <h1 className="font-display text-[clamp(2rem,5vw,3.75rem)] leading-[0.95] uppercase">Schedules</h1>
+            <p className="mt-3 max-w-md text-sm leading-relaxed text-white/60">
+              View and manage upcoming events and bookings.
+            </p>
           </div>
-          {isAdmin && (
-            <Button className="w-full sm:w-auto" onClick={() => { resetForm(); setAddOpen(true); }}>
-              <Plus className="mr-2 h-4 w-4" />
-              New Schedule
-            </Button>
-          )}
+          <Basketball className="hidden h-auto w-24 shrink-0 animate-float sm:block lg:w-32" />
         </div>
+      </section>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {schedules.length === 0 ? (
-          <Card className="col-span-full">
+          <Card className="col-span-full rounded-2xl">
             <CardContent className="flex flex-col items-center justify-center py-12">
               <Calendar className="h-12 w-12 text-muted-foreground mb-4" />
               <p className="text-lg font-medium">No schedules yet</p>
@@ -177,24 +196,24 @@ export default function SchedulesPage() {
           </Card>
         ) : (
           schedules.map((schedule) => (
-            <Card key={schedule.id}>
+            <Card key={schedule.id} className="rounded-2xl hover:-translate-y-1 hover:border-court/40 transition-all duration-300">
               <CardHeader>
-                  <div className="flex items-start justify-between gap-2">
-                    <CardTitle className="text-base sm:text-lg">{schedule.title}</CardTitle>
-                    <div className="flex items-center gap-2">
-                      <Badge variant={typeBadgeVariant(schedule.type)}>{schedule.type}</Badge>
-                      {isAdmin && (
-                        <>
-                          <Button variant="ghost" size="icon-sm" onClick={() => openEdit(schedule)}>
-                            <Calendar className="h-3.5 w-3.5" />
-                          </Button>
-                          <Button variant="ghost" size="icon-sm" onClick={() => setDeleteId(schedule.id)}>
-                            <Trash2 className="h-3.5 w-3.5 text-destructive" />
-                          </Button>
-                        </>
-                      )}
-                    </div>
+                <div className="flex items-start justify-between gap-2">
+                  <CardTitle className="text-base sm:text-lg">{schedule.title}</CardTitle>
+                  <div className="flex items-center gap-2">
+                    <Badge variant={typeBadgeVariant(schedule.type)}>{schedule.type}</Badge>
+                    {isAdmin && (
+                      <>
+                        <Button variant="ghost" size="icon-sm" onClick={() => openEdit(schedule)}>
+                          <Calendar className="h-3.5 w-3.5" />
+                        </Button>
+                        <Button variant="ghost" size="icon-sm" onClick={() => setDeleteId(schedule.id)}>
+                          <Trash2 className="h-3.5 w-3.5 text-destructive" />
+                        </Button>
+                      </>
+                    )}
                   </div>
+                </div>
                 <CardDescription>{schedule.team}</CardDescription>
               </CardHeader>
               <CardContent>

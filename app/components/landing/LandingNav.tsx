@@ -35,19 +35,19 @@ export default function LandingNav() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-2 px-4 sm:gap-4 sm:px-6 lg:px-8">
         {/* Brand */}
         <Link href="/" className="flex items-center gap-2.5">
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-court">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-court">
             <Trophy className="h-5 w-5 text-black" />
           </span>
-          <span className="font-display text-lg uppercase tracking-wide">
+          <span className="font-display text-lg uppercase tracking-wide max-[400px]:hidden">
             L.A Basketball
           </span>
         </Link>
 
         {/* Center links */}
-        <nav className="hidden items-center gap-8 md:flex">
+        <nav className="hidden items-center gap-6 md:flex lg:gap-8">
           {navLinks.map((link) => (
             <a
               key={link.label}
@@ -124,13 +124,23 @@ export default function LandingNav() {
                 {link.label}
               </a>
             ))}
-            <Link
-              href="/login"
-              onClick={() => setMobileOpen(false)}
-              className="rounded-md px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground sm:hidden"
-            >
-              Sign in
-            </Link>
+            {mounted && token ? (
+              <Link
+                href="/dashboard"
+                onClick={() => setMobileOpen(false)}
+                className="rounded-md px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground sm:hidden"
+              >
+                Dashboard
+              </Link>
+            ) : (
+              <Link
+                href="/login"
+                onClick={() => setMobileOpen(false)}
+                className="rounded-md px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground sm:hidden"
+              >
+                Sign in
+              </Link>
+            )}
           </div>
         </nav>
       )}

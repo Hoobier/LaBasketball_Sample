@@ -33,6 +33,8 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus, Pencil, Trash2, Check, X, Loader2 } from "lucide-react";
 import { useAuth } from "@/app/contexts/AuthContext";
+import Basketball from "@/app/components/landing/Basketball";
+import CourtBackdrop from "@/app/components/landing/CourtBackdrop";
 
 interface Slot {
   id: number;
@@ -242,6 +244,17 @@ export default function AvailableSlotPage() {
   if (loading) {
     return (
       <div className="p-4 sm:p-6 lg:p-8">
+        <div className="relative mb-6 overflow-hidden rounded-3xl bg-black p-6 text-white sm:p-10">
+          <CourtBackdrop />
+          <div className="pointer-events-none absolute -top-24 -right-16 h-80 w-80 rounded-full bg-court/25 blur-[100px]" aria-hidden="true" />
+          <div className="relative">
+            <p className="mb-3 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.35em] text-court">
+              <span className="h-px w-10 bg-court" />
+              Booking
+            </p>
+            <h1 className="font-display text-[clamp(2rem,5vw,3.75rem)] leading-[0.95] uppercase">Available Slots</h1>
+          </div>
+        </div>
         <div className="flex items-center justify-center py-12">
           <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
         </div>
@@ -250,38 +263,62 @@ export default function AvailableSlotPage() {
   }
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8">
-      <div className="mb-6 sm:mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Available Slots</h1>
-          <p className="text-muted-foreground text-sm sm:text-base">Manage court booking slots and availability</p>
+    <div className="space-y-6 p-4 sm:p-6 lg:p-8">
+      {/* Hero Header */}
+      <section className="relative overflow-hidden rounded-3xl bg-black p-6 text-white sm:p-10">
+        <CourtBackdrop />
+        <div className="pointer-events-none absolute -top-24 -right-16 h-80 w-80 rounded-full bg-court/25 blur-[100px]" aria-hidden="true" />
+        <div className="relative flex items-start justify-between">
+          <div>
+            <p className="mb-3 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.35em] text-court">
+              <span className="h-px w-10 bg-court" />
+              Courts
+            </p>
+            <h1 className="font-display text-[clamp(2rem,5vw,3.75rem)] leading-[0.95] uppercase">
+              Available Slots
+            </h1>
+            <p className="mt-3 max-w-md text-sm leading-relaxed text-white/60">
+              Manage court booking slots and availability across all venues.
+            </p>
+          </div>
+          <Basketball className="hidden h-auto w-24 shrink-0 animate-float sm:block lg:w-32" />
         </div>
-        {isAdmin && (
-          <Button className="w-full sm:w-auto" onClick={() => { resetForm(); setAddOpen(true); }}>
-            <Plus className="mr-2 h-4 w-4" />
-            Add Slot
-          </Button>
-        )}
-      </div>
+      </section>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 mb-6">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardDescription>Available</CardDescription>
-            <CardTitle className="text-2xl text-green-600">{counts.available}</CardTitle>
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <Card className="rounded-2xl border-court/30 bg-court/5 hover:-translate-y-1 hover:border-court/60 transition-all duration-300">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardDescription className="text-xs font-semibold uppercase tracking-[0.2em]">Available</CardDescription>
+            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-green-500/15 text-green-500">
+              <Check className="h-5 w-5" />
+            </span>
           </CardHeader>
+          <CardContent>
+            <div className="font-display text-5xl leading-none text-green-600">{counts.available}</div>
+          </CardContent>
         </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardDescription>Booked</CardDescription>
-            <CardTitle className="text-2xl text-red-600">{counts.booked}</CardTitle>
+        <Card className="rounded-2xl border-destructive/30 bg-destructive/5 hover:-translate-y-1 hover:border-destructive/60 transition-all duration-300">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardDescription className="text-xs font-semibold uppercase tracking-[0.2em]">Booked</CardDescription>
+            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-red-500/15 text-red-500">
+              <X className="h-5 w-5" />
+            </span>
           </CardHeader>
+          <CardContent>
+            <div className="font-display text-5xl leading-none text-red-600">{counts.booked}</div>
+          </CardContent>
         </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardDescription>Maintenance</CardDescription>
-            <CardTitle className="text-2xl text-yellow-600">{counts.maintenance}</CardTitle>
+        <Card className="rounded-2xl border-yellow-500/30 bg-yellow-500/5 hover:-translate-y-1 hover:border-yellow-500/60 transition-all duration-300">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardDescription className="text-xs font-semibold uppercase tracking-[0.2em]">Maintenance</CardDescription>
+            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-yellow-500/15 text-yellow-500">
+              <Loader2 className="h-5 w-5" />
+            </span>
           </CardHeader>
+          <CardContent>
+            <div className="font-display text-5xl leading-none text-yellow-600">{counts.maintenance}</div>
+          </CardContent>
         </Card>
       </div>
 
@@ -301,7 +338,7 @@ export default function AvailableSlotPage() {
         </TabsList>
 
         <TabsContent value="slots" className="mt-4">
-          <Card>
+          <Card className="rounded-2xl">
             <CardHeader>
               <CardTitle>All Slots</CardTitle>
               <CardDescription>Showing all booking slots across courts</CardDescription>
@@ -358,7 +395,7 @@ export default function AvailableSlotPage() {
 
         {isAdmin && (
           <TabsContent value="reservations" className="mt-4">
-            <Card>
+            <Card className="rounded-2xl">
               <CardHeader>
                 <CardTitle>Pending Reservations</CardTitle>
                 <CardDescription>Review and approve user reservation requests</CardDescription>

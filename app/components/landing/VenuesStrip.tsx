@@ -42,7 +42,7 @@ export default function VenuesStrip() {
   const featured = venues.slice(0, 3);
 
   return (
-    <section id="venues" className="py-20 sm:py-24">
+    <section id="venues" className="scroll-mt-16 py-20 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
           <div>

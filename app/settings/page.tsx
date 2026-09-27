@@ -32,6 +32,8 @@ import {
   Trash2,
   Loader2,
 } from "lucide-react";
+import Basketball from "@/app/components/landing/Basketball";
+import CourtBackdrop from "@/app/components/landing/CourtBackdrop";
 import ProfileTab from "./components/ProfileTab";
 import SecurityTab from "./components/SecurityTab";
 import NotificationsTab from "./components/NotificationsTab";
@@ -44,15 +46,24 @@ export default function SettingsPage() {
   const isDeleteEnabled = deleteConfirmText === "DELETE";
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8">
-      <div className="mb-6 sm:mb-8">
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
-          Settings
-        </h1>
-        <p className="text-muted-foreground text-sm sm:text-base">
-          Manage your account, preferences, and security settings
-        </p>
-      </div>
+    <div className="space-y-6 p-4 sm:p-6 lg:p-8">
+      <section className="relative overflow-hidden rounded-3xl bg-black p-6 text-white sm:p-10">
+        <CourtBackdrop />
+        <div className="pointer-events-none absolute -top-24 -right-16 h-80 w-80 rounded-full bg-court/25 blur-[100px]" aria-hidden="true" />
+        <div className="relative flex items-start justify-between">
+          <div>
+            <p className="mb-3 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.35em] text-court">
+              <span className="h-px w-10 bg-court" />
+              Account
+            </p>
+            <h1 className="font-display text-[clamp(2rem,5vw,3.75rem)] leading-[0.95] uppercase">Settings</h1>
+            <p className="mt-3 max-w-md text-sm leading-relaxed text-white/60">
+              Manage your account, preferences, and security settings.
+            </p>
+          </div>
+          <Basketball className="hidden h-auto w-24 shrink-0 animate-float sm:block lg:w-32" />
+        </div>
+      </section>
 
       <Tabs defaultValue="profile" className="w-full">
         <TabsList variant="line" className="w-full justify-start overflow-x-auto">
@@ -91,8 +102,7 @@ export default function SettingsPage() {
         </TabsContent>
       </Tabs>
 
-      {/* Danger Zone - Always visible at bottom */}
-      <Card className="mt-8 border-destructive/50">
+      <Card className="mt-8 rounded-2xl border-destructive/50">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-destructive">
             <AlertTriangle className="h-5 w-5" />

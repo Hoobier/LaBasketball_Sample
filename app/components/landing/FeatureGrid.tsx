@@ -132,7 +132,7 @@ function CardArt({ art }: { art: FeatureCard["art"] }) {
 
 export default function FeatureGrid() {
   return (
-    <section id="courts" className="py-20 sm:py-24">
+    <section id="courts" className="scroll-mt-16 py-20 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
           <div>
@@ -158,7 +158,7 @@ export default function FeatureGrid() {
               href={feature.href}
               className={`group relative flex aspect-[5/4] flex-col justify-between overflow-hidden rounded-2xl p-6 sm:p-8 ${feature.background} ${feature.titleColor} transition-transform duration-300 hover:-translate-y-1`}
             >
-              <div className="flex items-start justify-between">
+              <div className="relative z-10 flex items-start justify-between">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.25em] opacity-70">
                     {feature.eyebrow}

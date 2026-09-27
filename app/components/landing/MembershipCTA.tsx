@@ -10,7 +10,7 @@ const perks = [
 
 export default function MembershipCTA() {
   return (
-    <section id="membership" className="relative overflow-hidden py-20 sm:py-28">
+    <section id="membership" className="relative scroll-mt-16 overflow-hidden py-20 sm:py-28">
       <div
         className="pointer-events-none absolute -left-32 top-1/2 h-[420px] w-[420px] -translate-y-1/2 rounded-full bg-court/20 blur-[110px]"
         aria-hidden="true"
@@ -63,7 +63,7 @@ export default function MembershipCTA() {
         </div>
 
         {/* Playbook card */}
-        <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-gradient-to-br from-[#171717] to-black p-8 text-white shadow-2xl">
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#171717] to-black p-6 text-white shadow-2xl sm:p-8">
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white/50">
             This week&apos;s run
           </p>

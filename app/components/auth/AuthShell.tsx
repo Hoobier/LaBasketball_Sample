@@ -60,7 +60,7 @@ export default function AuthShell({
             <span className="h-px w-10 bg-court" />
             {eyebrow}
           </p>
-          <h1 className="whitespace-pre-line font-display text-[clamp(2.75vw,4vw,4.5rem)] leading-[0.9] uppercase text-white">
+          <h1 className="whitespace-pre-line font-display text-[clamp(2.5rem,4vw,4.5rem)] leading-[0.9] uppercase text-white">
             {title}
           </h1>
           <p className="mt-5 max-w-sm text-sm leading-relaxed text-white/60">
@@ -79,7 +79,7 @@ export default function AuthShell({
   );
 
   const form = (
-    <div className="relative flex min-h-screen flex-col p-6 sm:p-10">
+    <div className="relative flex min-h-svh flex-col p-6 sm:p-10">
       <div className="lg:hidden">
         <BrandMark />
       </div>
@@ -91,7 +91,7 @@ export default function AuthShell({
   );
 
   return (
-    <div className="grid min-h-screen bg-background lg:grid-cols-2">
+    <div className="grid min-h-svh bg-background lg:grid-cols-2">
       {artSide === "left" ? (
         <>
           {art}
