@@ -24,5 +24,9 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: [
+    // Everything with a file extension is a static asset (public/ images, icons,
+    // etc.) and must not be redirected, or it gets served HTML instead.
+    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.[\\w]+$).*)",
+  ],
 };
