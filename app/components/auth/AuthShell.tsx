@@ -2,6 +2,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import Basketball from "@/app/components/landing/Basketball";
 import CourtBackdrop from "@/app/components/landing/CourtBackdrop";
+import PageMascot from "@/app/components/PageMascot";
 
 interface AuthShellProps {
   eyebrow: string;
@@ -73,8 +74,15 @@ export default function AuthShell({
         <BrandMark />
       </div>
 
-      <div className="flex flex-1 items-center justify-center">
+      <div className="flex flex-1 items-center justify-center py-10">
         <div className="w-full max-w-md">{children}</div>
+      </div>
+
+      <div className="flex flex-col items-center gap-1 pb-2">
+        <PageMascot placement="inline" size={104} />
+        <p className="text-center text-xs text-muted-foreground">
+          Stuck? Boop Hoops for a little help.
+        </p>
       </div>
     </div>
   );

@@ -8,6 +8,7 @@ import StatsBand from "./components/landing/StatsBand";
 import MembershipCTA from "./components/landing/MembershipCTA";
 import VenuesStrip from "./components/landing/VenuesStrip";
 import LandingFooter from "./components/landing/LandingFooter";
+import PageMascot from "./components/PageMascot";
 
 export const metadata: Metadata = {
   title: "L.A Basketball — Own the Court",
@@ -29,6 +30,7 @@ export default function LandingPage() {
         <VenuesStrip />
       </main>
       <LandingFooter />
+      <PageMascot />
     </div>
   );
 }

@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600" role="img" aria-label="Mascot head directions">
+  <defs>
+    <clipPath id="lb-ball-clip">
+      <circle cx="166" cy="146" r="26" />
+    </clipPath>
+
+    <g id="lb-body">
+      <ellipse cx="100" cy="192" rx="34" ry="6" fill="#000" opacity=".16" />
+      <path d="M64 164 H136 L131 196 H69 Z" fill="#1f1f1f" />
+      <path d="M62 170 C60 134 76 116 100 116 C124 116 140 134 138 170 Z" fill="#141414" />
+      <path d="M63 168 C61 135 77 118 100 118 C123 118 139 135 137 168" fill="none" stroke="#ff7a1a" stroke-width="6" />
+      <text x="100" y="160" text-anchor="middle" font-family="Verdana, DejaVu Sans, sans-serif" font-size="26" font-weight="bold" fill="#ff7a1a">23</text>
+      <path d="M67 125 C56 140 51 152 53 163" fill="none" stroke="#f6c99a" stroke-width="18" stroke-linecap="round" />
+      <path d="M133 125 C143 133 149 139 153 145" fill="none" stroke="#f6c99a" stroke-width="18" stroke-linecap="round" />
+      <circle cx="166" cy="146" r="26" fill="#e8630a" />
+      <g clip-path="url(#lb-ball-clip)" stroke="#141414" stroke-width="2.5" fill="none">
+        <line x1="166" y1="118" x2="166" y2="174" />
+        <line x1="138" y1="146" x2="194" y2="146" />
+        <path d="M141 124 C124 146 124 158 141 178" />
+        <path d="M191 124 C208 146 208 158 191 178" />
+      </g>
+      <circle cx="166" cy="146" r="26" fill="none" stroke="#141414" stroke-width="3" />
+      <ellipse cx="152" cy="153" rx="11" ry="9" fill="#f6c99a" stroke="#141414" stroke-width="2.5" />
+    </g>
+
+    <g id="lb-base-head">
+      <rect x="88" y="104" width="24" height="22" fill="#e0a878" />
+      <circle cx="54" cy="78" r="10" fill="#f6c99a" stroke="#141414" stroke-width="2.5" />
+      <circle cx="146" cy="78" r="10" fill="#f6c99a" stroke="#141414" stroke-width="2.5" />
+      <circle cx="100" cy="74" r="46" fill="#f6c99a" stroke="#141414" stroke-width="3" />
+      <path d="M50 62 C58 26 142 26 150 62 C138 44 62 44 50 62 Z" fill="#1a1a1a" />
+      <path d="M53 55 C63 41 137 41 147 55" fill="none" stroke="#ff7a1a" stroke-width="9" stroke-linecap="round" />
+    </g>
+
+    <g id="lb-face">
+      <ellipse cx="82" cy="80" rx="7" ry="9" fill="#141414" />
+      <ellipse cx="118" cy="80" rx="7" ry="9" fill="#141414" />
+      <path d="M86 100 Q100 112 114 100" fill="none" stroke="#141414" stroke-width="4" stroke-linecap="round" />
+    </g>
+
+    <g id="lb-cell">
+      <use href="#lb-body" />
+    </g>
+  </defs>
+
+  <g transform="translate(0,0)">
+    <use href="#lb-cell" />
+    <g transform="translate(-16,-13)">
+      <use href="#lb-base-head" />
+      <use href="#lb-face" />
+    </g>
+  </g>
+
+  <g transform="translate(200,0)">
+    <use href="#lb-cell" />
+    <g transform="translate(0,-17)">
+      <use href="#lb-base-head" />
+      <use href="#lb-face" />
+    </g>
+  </g>
+
+  <g transform="translate(400,0)">
+    <use href="#lb-cell" />
+    <g transform="translate(16,-13)">
+      <use href="#lb-base-head" />
+      <use href="#lb-face" />
+    </g>
+  </g>
+
+  <g transform="translate(0,200)">
+    <use href="#lb-cell" />
+    <g transform="translate(-20,-3)">
+      <use href="#lb-base-head" />
+      <use href="#lb-face" />
+    </g>
+  </g>
+
+  <g transform="translate(200,200)">
+    <use href="#lb-cell" />
+    <use href="#lb-base-head" />
+    <use href="#lb-face" />
+  </g>
+
+  <g transform="translate(400,200)">
+    <use href="#lb-cell" />
+    <g transform="translate(20,-3)">
+      <use href="#lb-base-head" />
+      <use href="#lb-face" />
+    </g>
+  </g>
+
+  <g transform="translate(0,400)">
+    <use href="#lb-cell" />
+    <g transform="translate(-16,13)">
+      <use href="#lb-base-head" />
+      <use href="#lb-face" />
+    </g>
+  </g>
+
+  <g transform="translate(200,400)">
+    <use href="#lb-cell" />
+    <g transform="translate(0,17)">
+      <use href="#lb-base-head" />
+      <use href="#lb-face" />
+    </g>
+  </g>
+
+  <g transform="translate(400,400)">
+    <use href="#lb-cell" />
+    <g transform="translate(16,13)">
+      <use href="#lb-base-head" />
+      <use href="#lb-face" />
+    </g>
+  </g>
+</svg>
